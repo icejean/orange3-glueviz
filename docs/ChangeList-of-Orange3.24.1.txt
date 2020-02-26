@@ -1,7 +1,7 @@
 1.Change for Orange.canvas.__main__.py
 
 # Modified by Jean 2020/01/10, add two parameters:
-# data: the Orange table passed in from Spyder 
+# datasets: the Orange table list passed in from Spyder 
 # logfile: the file name for Orange log messages,
 # since  the windows stdout & stderr problem for sub process 
 def main(argv=None, datasets=None, logfile=None):
@@ -22,22 +22,22 @@ def main(argv=None, datasets=None, logfile=None):
             handlers=[make_stdout_handler(levels[options.log_level])]
             )
 
-    # Added by Jean 2020/01/10, insert an initial data table widget if it's not None
+    # Added by Jean 2020/01/10, insert initial data table widgets if it's not None
     insertTableWidget(canvas_window, datasets)
 
     log.info("Entering main event loop.")
 
 
-# Added by Jean 2020/01/10, for passing in an initial table to the data table widget
+# Added by Jean 2020/01/10, for passing in initial tables to data table widgets
 init_tables = None
 
 
 def insertTableWidget(canvas_window,datasets):
     if datasets is not None:
-        # save reference to the table passed in for creating an instance of OWDataTable latter
+        # save reference to the tables passed in for creating instances of OWDataTable latter
         global init_tables
         init_tables = datasets
-        # process the table list passing in
+        # process the table list passed in
         for table in datasets:
             # create a WidgetDescription for creating a node for the passed in table latter
             init_widget = newDataTableDesc(table)
@@ -48,9 +48,11 @@ def insertTableWidget(canvas_window,datasets):
                     # create a node for it, 
                     # and let Orange create an instance for the OWDataTable latter,
                     # through it's popup queue mechanism
+                    
                     # Orange 3.24.0
                     # scheme_widget.usageStatistics().set_node_type(UsageStatistics.NodeAddClick)
                     # node = scheme_widget.createNewNode(init_widget)
+                    
                     # Orange 3.24.1
                     statistics = scheme_widget.usageStatistics()
                     statistics.begin_action(UsageStatistics.ToolboxClick)
@@ -76,10 +78,10 @@ def newDataTableDesc(table):
     
     # Lists
     widget.keywords = []
-    # One InputSignal for data table widget
+    # One InputSignal for a data table widget
     in_c = InputSignal(name='Data', type=('Orange.data.table.Table',), handler='set_dataset')
     widget.inputs = [in_c]
-    # Two OutputSignal for data table widget
+    # Two OutputSignals for a data table widget
     out_c1 = OutputSignal(name='Selected Data', type=('Orange.data.table.Table',))
     out_c2 = OutputSignal(name='Data', type=('Orange.data.table.Table',))
     widget.outputs = [out_c1, out_c2]
@@ -104,9 +106,9 @@ def newDataTableDesc(table):
 
 2.Change for orangewidget.workflow.widgetsscheme.py
 
-        # Added by Jean 2020/01/10, bind the passed in table to the OWDataTable widget
-        # import the orange table passed in from Orange.canvas.__main__
-        # and set the dataset to it for data table widget passed in from Spyder
+        # Added by Jean 2020/01/10, bind a passed in table to an OWDataTable widget
+        # import the orange table list passed in from Orange.canvas.__main__
+        # and set the dataset to it for a data table widget passed in from Spyder
         from Orange.canvas.__main__ import init_tables
 
         isSpyder = desc.name[:11]
