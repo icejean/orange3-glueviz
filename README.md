@@ -17,5 +17,5 @@ There's an example in ./example/example.py
 
 If you need to pass data sets to Orange from Spyder,
 read the documents in ./doc and hack Orange as it is mentioned.
-The two files of Orange needed to be modified is there already, just copy and past.
+The two files of Orange need to be modified is there already, just copy and past.
 
