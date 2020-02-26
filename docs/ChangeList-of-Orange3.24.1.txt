@@ -1,0 +1,127 @@
+1.Change for Orange.canvas.__main__.py
+
+# Modified by Jean 2020/01/10, add two parameters:
+# data: the Orange table passed in from Spyder 
+# logfile: the file name for Orange log messages,
+# since  the windows stdout & stderr problem for sub process 
+def main(argv=None, datasets=None, logfile=None):
+
+    # comment out by Jean 2020/01/09, this bug is fixed in python3.7.5
+    # fix_win_pythonw_std_stream()
+
+
+    # modified by Jean 2020/01/10,to redirect log message to a file
+    if logfile is not None:
+        logging.basicConfig(
+            level=logging.DEBUG,
+            filename=logfile
+            )
+    else:
+        logging.basicConfig(
+            level=levels[options.log_level],
+            handlers=[make_stdout_handler(levels[options.log_level])]
+            )
+
+    # Added by Jean 2020/01/10, insert an initial data table widget if it's not None
+    insertTableWidget(canvas_window, datasets)
+
+    log.info("Entering main event loop.")
+
+
+# Added by Jean 2020/01/10, for passing in an initial table to the data table widget
+init_tables = None
+
+
+def insertTableWidget(canvas_window,datasets):
+    if datasets is not None:
+        # save reference to the table passed in for creating an instance of OWDataTable latter
+        global init_tables
+        init_tables = datasets
+        # process the table list passing in
+        for table in datasets:
+            # create a WidgetDescription for creating a node for the passed in table latter
+            init_widget = newDataTableDesc(table)
+            if init_widget is not None:
+                # get the schema of the current blank canvas 
+                scheme_widget = canvas_window.current_document()
+                if scheme_widget:
+                    # create a node for it, 
+                    # and let Orange create an instance for the OWDataTable latter,
+                    # through it's popup queue mechanism
+                    # Orange 3.24.0
+                    # scheme_widget.usageStatistics().set_node_type(UsageStatistics.NodeAddClick)
+                    # node = scheme_widget.createNewNode(init_widget)
+                    # Orange 3.24.1
+                    statistics = scheme_widget.usageStatistics()
+                    statistics.begin_action(UsageStatistics.ToolboxClick)
+                    scheme_widget.createNewNode(init_widget)
+                   
+                    log.debug("Node from spyder added: ",init_widget.name)
+
+
+def newDataTableDesc(table):
+    from orangecanvas.registry.description import WidgetDescription
+    from orangecanvas.registry.description import InputSignal
+    from orangecanvas.registry.description import OutputSignal
+    
+    widget = WidgetDescription("FromSpyder-"+table.name,"Orange.widgets.data.owtable",\
+                               qualified_name = "Orange.widgets.data.owtable.OWDataTable")
+    # Strings
+    widget.category = "Data"
+    widget.description = "View the dataset in a spreadsheet."
+    widget.icon = "icons/Table.svg"
+    widget.package = "Orange.widgets.data"
+    widget.project_name = "Orange3"
+    widget.priority = 1
+    
+    # Lists
+    widget.keywords = []
+    # One InputSignal for data table widget
+    in_c = InputSignal(name='Data', type=('Orange.data.table.Table',), handler='set_dataset')
+    widget.inputs = [in_c]
+    # Two OutputSignal for data table widget
+    out_c1 = OutputSignal(name='Selected Data', type=('Orange.data.table.Table',))
+    out_c2 = OutputSignal(name='Data', type=('Orange.data.table.Table',))
+    widget.outputs = [out_c1, out_c2]
+    widget.output = []
+    widget.replaces = []
+    
+    # Nones
+    widget.author = None
+    widget.author_email = None
+    widget.background = None
+    widget.help = None
+    widget.help_ref = None
+    widget.long_description = "This data table is come from Spyder by calling Orange."
+    widget.maintainer = None
+    widget.maintainer_email = None
+    widget.url = None
+    widget.version = None
+    
+    return widget
+
+
+
+2.Change for orangewidget.workflow.widgetsscheme.py
+
+        # Added by Jean 2020/01/10, bind the passed in table to the OWDataTable widget
+        # import the orange table passed in from Orange.canvas.__main__
+        # and set the dataset to it for data table widget passed in from Spyder
+        from Orange.canvas.__main__ import init_tables
+
+        isSpyder = desc.name[:11]
+        # only data table passed in from Spyder is initialized
+        if isSpyder == "FromSpyder-" and \
+            desc.qualified_name == "Orange.widgets.data.owtable.OWDataTable" and\
+            init_tables is not None:
+            wtable = None
+            for table in init_tables:
+                name = "FromSpyder-"+table.name
+                if name == desc.name:
+                    wtable = table
+                    break
+            if wtable is not None:
+                widget.set_dataset(wtable)           
+                log.info("Data bind to the data table widget: ", desc.name)
+                                    
+        return widget
