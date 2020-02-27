@@ -13,6 +13,7 @@ Required libraries:
     #                   "glueviz>=0.15.2"],
 
 Install:
+
     python setup.py install
     
 There's an example in ./example/example.py
