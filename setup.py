@@ -17,7 +17,10 @@ setup(
     #                   "anyqt>=0.0.10",
     #                   "sortedcollections>=1.1.2",
     #                   "sip>=4.19.8",
-    #                   "glueviz>=0.15.2"],
+    #                   "glueviz>=0.15.2",
+    #                   "orange3-network>=1.5.0",
+    #                   "numpy>=1.17.4",
+    #                   "scipy>=1.3.2"],
     
     classifiers=["Programming Language :: Python",
     				"License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
