@@ -2,7 +2,10 @@ The Orange3_Glueviz package
 
 Orange add-on for calling Glueviz within Orange.
 
-Please uncomment the lines in setup.py to install required libraries.
+Please uncomment the lines in setup.py to install required libraries. As I'm 
+not really sure the earliest versions it's needed, I just list the versions in use,
+and comment out it in case of breaking down your python package environment. 
+Please decide which version to be installed on your need.
 
 Required libraries:
 
@@ -35,3 +38,13 @@ First of all, call the function graph2tables() to transform an igraph into two
 orange table vertices & edges, then call orange and pass in the tables, and
 connect the "network from tables" widget to the two data table widgets to rebuild
 the graph.
+
+There's a bug in orangecontrib.network.network.base.py, in the degrees() function
+of the DirectedEdges() class, you can copy the file in ./spyder-orange3 directly:
+
+    def degrees(self, *, weighted=False):
+        return self._compute_degrees(self.edges, weighted) \
+               + self._compute_degrees(self.in_edges, weighted)
+               # the original line is wrong
+               # + self.compute_degrees(self.in_edges, weighted)
+
