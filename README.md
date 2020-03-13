@@ -3,7 +3,7 @@ The Orange3_Glueviz package
 Orange add-on for calling Glueviz within Orange.
 
 Please uncomment the lines in setup.py to install required libraries. As I'm 
-not really sure the earliest versions it's needed, I just list the versions in use,
+not really sure of the earliest versions required, I just list the versions in use,
 and comment out it in case of breaking down your python package environment. 
 Please decide which version to be installed on your need.
 
