@@ -48,3 +48,10 @@ of the DirectedEdges() class, you can copy the file in ./spyder-orange3 directly
                # the original line is wrong
                # + self.compute_degrees(self.in_edges, weighted)
 
+Mar,15,2020
+
+Add support of vertices & edges selection to the "Network From Tables" widget
+through a checkbox on widget GUI and a clean_network() function to verify
+vertices ids are in range, remove wrong edges and null vertices if it's necessary,
+recode the ids of vertices if it's necessary. Please refer to the example workflow
+ of airtraffic.net in ./docs.
