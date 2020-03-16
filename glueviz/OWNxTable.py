@@ -174,7 +174,7 @@ class OWNxTable(OWWidget):
         else:
             self.infoc.setText("A network named %s is created." % self.network.name)
             if self.verticesDeleted>0:
-                self.infod.setText("%d vertices without any edge are deleted on output, ids're recoded." % self.verticesDeleted)
+                self.infod.setText("%d vertices without any edge are deleted on output, ids're reindexed." % self.verticesDeleted)
             else:
                 self.infod.setText("No vertex deleted on output.")
             if self.edgesDeleted>0:
@@ -183,7 +183,7 @@ class OWNxTable(OWWidget):
                 self.infoe.setText("No edge deleted on output.")
            
 
-    # delete the edges without nodes and nodes without any edge if reuired
+    # delete the edges without nodes and nodes without any edge if required
     def clean_network(self):
         vertices_tb = self.vertices
         edges_tb = self.edges
@@ -231,9 +231,9 @@ class OWNxTable(OWWidget):
             except:
                 pass
                         
-            # Recode vertices ids and edges source and target
+            # Reindex vertices ids and edges source and target
             XV = X2[:,0].astype(np.int) ; XE = X1[:,[0,1]].astype(np.int)
-            # sort is important for recoding
+            # sort is important for reindexing
             nodes = list(XV)
             nodes.sort()
             for i in range(len(nodes)):
@@ -250,6 +250,12 @@ class OWNxTable(OWWidget):
         self.edges = edges_tb2
         self.edgesDeleted = edgesDeleted
         self.verticesDeleted = verticesDeleted
+        
+        # set the number of decimals to 0 for ids of vertices, source & target of edges
+        # to display as integer
+        self.vertices.domain.attributes[0].number_of_decimals = 0
+        self.edges.domain.attributes[0].number_of_decimals = 0
+        self.edges.domain.attributes[1].number_of_decimals = 0
            
                     
     # send the network created to output signal    
@@ -268,6 +274,6 @@ class OWNxTable(OWWidget):
 if __name__ == "__main__":
     # Just for widget debugging
     WidgetPreview(OWNxTable).run(
-       set_vertices=Table("D:/JetBrains/IdeaProjects/MyPyhton38/scripts/air-vertices2"),
-       set_edges=Table("D:/JetBrains/IdeaProjects/MyPyhton38/scripts/air-edges2")
+        set_vertices=Table("D:/JetBrains/IdeaProjects/MyPyhton38/scripts/air-vertices2"),
+        set_edges=Table("D:/JetBrains/IdeaProjects/MyPyhton38/scripts/air-edges2")
     )
