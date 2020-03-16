@@ -53,5 +53,17 @@ Mar,15,2020
 Add support of vertices & edges selection to the "Network From Tables" widget
 through a checkbox on widget GUI and a clean_network() function to verify
 vertices ids are in range, remove wrong edges and null vertices if it's necessary,
-recode the ids of vertices if it's necessary. Please refer to the example workflow
+reindex the ids of vertices if it's necessary. Please refer to the example workflow
  of airtraffic.net in ./docs.
+ 
+Mar,16,2020
+
+Address the isue of displaying vertices ids as real through setting the decimal
+of orange.data.variable.ContinuousVariable to 0, now it's integer as required.
+
+        # set the number of decimals to 0 for ids of vertices, source & target of edges
+        # to display as integer
+        self.vertices.domain.attributes[0].number_of_decimals = 0
+        self.edges.domain.attributes[0].number_of_decimals = 0
+        self.edges.domain.attributes[1].number_of_decimals = 0
+        
