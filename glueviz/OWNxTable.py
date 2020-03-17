@@ -63,7 +63,7 @@ class OWNxTable(OWWidget):
         # if vertices is not None:
         #     vertices.X[:,0].astype(np.int)
         if self.verticesDeleted>0:
-            self.infof.setText("Vertices ids are recoded, please delete & create the widget again!")
+            self.infof.setText("Vertices ids are reindexed, please delete & create the widget again!")
             return
         self.vertices = vertices
         self.auto_data = vertices
@@ -85,7 +85,7 @@ class OWNxTable(OWWidget):
         #     edges.X[:,0].astype(np.int)
         #     edges.X[:,1].astype(np.int)
         if self.verticesDeleted>0:
-            self.infof.setText("Vertices ids are recoded, please delete & create the widget again!")
+            self.infof.setText("Vertices ids are indexed, please delete & create the widget again!")
             return           
         self.edges = edges
         if self.edges is not None:
