@@ -58,7 +58,7 @@ reindex the ids of vertices if it's necessary. Please refer to the example workf
  
 Mar,16,2020
 
-Address the isue of displaying vertices ids as real through setting the decimal
+Address the issue of displaying vertices ids as real through setting the decimal
 of orange.data.variable.ContinuousVariable to 0, now it's integer as required.
 
         # set the number of decimals to 0 for ids of vertices, source & target of edges
