@@ -66,4 +66,12 @@ of orange.data.variable.ContinuousVariable to 0, now it's integer as required.
         self.vertices.domain.attributes[0].number_of_decimals = 0
         self.edges.domain.attributes[0].number_of_decimals = 0
         self.edges.domain.attributes[1].number_of_decimals = 0
+
+Mar,18,2020
         
+Add a widget "Network To Tables" to transform a network into vertices & edges data
+tables.
+Add check to "Network From Tables" widget to check inputs and create an id column
+for vertices table if it's necessary.
+Update the icons for these two widgets.
+       
