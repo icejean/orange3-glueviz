@@ -7,17 +7,20 @@ Widget to create a network from vertices and edges orange data tables.
 
 import numpy as np
 import scipy.sparse as sp
-from Orange.data import Table
 from Orange.widgets import gui
 from Orange.widgets.utils.widgetpreview import WidgetPreview
 from Orange.widgets.widget import OWWidget, Input, Output
 from orangecontrib.network.network.base import Network, EdgeType
 from Orange.widgets.settings import Setting, ContextSetting
+from Orange.data import (
+    Table, Domain, StringVariable, 
+    ContinuousVariable
+)
 
 class OWNxTable(OWWidget):
     name = "Network From Tables"
     description = "Create a network from vertices and edges data tables."
-    icon = "icons/NetworkFile.svg"
+    icon = "icons/NetworkFromTables.svg"
     priority = 200
 
     class Inputs:
@@ -58,12 +61,12 @@ class OWNxTable(OWWidget):
 
     @Inputs.vertices
     def set_vertices(self, vertices):
-        # TODO: try to change it to int, not successed yet
-        # it seems that numpy array must be the same type, both float and int is impossible.        
-        # if vertices is not None:
-        #     vertices.X[:,0].astype(np.int)
         if self.verticesDeleted>0:
             self.infof.setText("Vertices ids are reindexed, please delete & create the widget again!")
+            return
+        if  vertices is not None and \
+            len(vertices.domain.attributes) == 0 and len(vertices.domain.metas) == 0:
+            self.infoa.setText("No vertex attribute on input.")
             return
         self.vertices = vertices
         self.auto_data = vertices
@@ -79,14 +82,20 @@ class OWNxTable(OWWidget):
 
     @Inputs.edges
     def set_edges(self, edges):
-        # TODO: try to change it to int, not successed yet
-        # it seems that numpy array must be the same type, both float and int is impossible.        
-        # if edges is not None:
-        #     edges.X[:,0].astype(np.int)
-        #     edges.X[:,1].astype(np.int)
         if self.verticesDeleted>0:
             self.infof.setText("Vertices ids are indexed, please delete & create the widget again!")
-            return           
+            return
+        if edges is not None:
+            sourceCol = None; targetCol = None
+            for i,attr in enumerate(edges.domain.attributes):
+                if attr.name=="source":
+                    sourceCol = attr
+                if attr.name=="target":
+                    targetCol = attr
+            if sourceCol is None or targetCol is None:
+                self.infob.setText("No source or target column on edges input." )
+                return
+        
         self.edges = edges
         if self.edges is not None:
             self.infob.setText("%d edges on input." % self.edges.X.shape[0]) 
@@ -111,6 +120,9 @@ class OWNxTable(OWWidget):
             self.original_nodes = None
             return
         
+        # check if there's an id column, and add one if necessary
+        self.check_id()
+        # sometimes orange3-network exports items without an id column
         # delete the edges without nodes or nodes without any edge
         self.clean_network()
         
@@ -181,7 +193,36 @@ class OWNxTable(OWWidget):
                 self.infoe.setText("%d edges with vertex out of range are deleted on output." % self.edgesDeleted)
             else:
                 self.infoe.setText("No edge deleted on output.")
-           
+
+
+    # check if there's an id column of the vertices table, and creat one if it's necessary
+    def check_id(self):
+        nodes = self.vertices
+        if len(nodes.domain.attributes) == 0:   # no attribute column, so no id column
+            X = np.array(range(nodes.metas.shape[0]))   # add an id column for it
+            X = X.reshape(len(X),1)
+            domain = Domain([ContinuousVariable("id")], nodes.domain.class_vars, nodes.domain.metas)
+            vertices = Table.from_numpy(domain,X,nodes.Y,nodes.metas,nodes.W)
+            self.vertices = vertices
+        else:                                   # check if there's an id column
+            idcol = None
+            for i,attr in enumerate(nodes.domain.attributes):
+                if attr.name=="id":
+                    idcol=attr
+                    break
+            if idcol is None:   # no id column, add an id column for it
+                X1 = np.array(range(nodes.X.shape[0]))
+                X = nodes.X
+                X = np.insert(X, 0, values=X1, axis=1)
+                attrs = []
+                for attr in nodes.domain.attributes:
+                    attrs.append(attr)
+                attrs.insert(0,ContinuousVariable("id"))
+                domain = Domain(attrs,nodes.domain.class_vars,nodes.domain.metas)
+                vertices = Table.from_numpy(domain,X,nodes.Y,nodes.metas,nodes.W)
+                self.vertices = vertices
+            else:               # there's an id column already
+                pass        
 
     # delete the edges without nodes and nodes without any edge if required
     def clean_network(self):
@@ -190,7 +231,10 @@ class OWNxTable(OWWidget):
         verticesDeleted = 0
         edgesDeleted = 0
         # delete edges without nodes
-        nodes = set(list(vertices_tb.X[:,0]))
+        try:
+            nodes = set(list(vertices_tb.X[:,0]))   # more than one columns
+        except:
+            nodes = set(list(vertices_tb.X))        # only the id column
         X1=edges_tb.X; Y1=edges_tb.Y; W1=edges_tb.W; metas1 = edges_tb.metas
         todelete=[]
         try:
