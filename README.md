@@ -56,8 +56,8 @@ vertices ids are in range, remove wrong edges and null vertices if it's necessar
 reindex the ids of vertices if it's necessary. Please refer to the example workflow
  of airtraffic.net in ./docs.
  
-If you select a subset of the vertices, remember to check the "Remove nodes without
-any edge" check box to force reindexing the ids of vertices, or you may get an 
+If you select a subset of the vertices, the widget will check the "Remove nodes without
+any edge" check box automatically to force reindexing the ids of vertices, or you may get an 
 index out of range exception when creating the network, as the id values may exceed
 the range of the underlying sparse array.
  
