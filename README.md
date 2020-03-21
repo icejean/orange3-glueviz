@@ -56,6 +56,11 @@ vertices ids are in range, remove wrong edges and null vertices if it's necessar
 reindex the ids of vertices if it's necessary. Please refer to the example workflow
  of airtraffic.net in ./docs.
  
+If you select a subset of the vertices, remember to check the "Remove nodes without
+any edge" check box to force reindexing the ids of vertices, or you' may get an 
+index out of range exception when creating the network, as the id values may exceed
+the range of the underlying sparse array.
+ 
 Mar,16,2020
 
 Address the issue of displaying vertices ids as real through setting the decimal
@@ -74,4 +79,20 @@ tables.
 Add check to "Network From Tables" widget to check inputs and create an id column
 for vertices table if it's necessary.
 Update the icons for these two widgets.
+
+Mar,21,2020
+
+Modify the "Network From Tables" widget to accept changes from the inputs,
+without deleting and creating a new widget again. 
+
+Modify the messages from the widget to give important Information, Warning and Error
+message icons on the canvas widget icon of Orange workflow.
+
+Fix a bug of the Network From Tables widget in clean_network():
+
+        if removeNodes:
+            # nodes = set(list(edges_tb.X[:,0])) | set(list(edges_tb.X[:,1])) 
+            nodes = set(list(X1[:,0])) | set(list(X1[:,1]))
+
+
        
