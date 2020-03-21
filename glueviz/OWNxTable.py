@@ -357,7 +357,7 @@ class OWNxTable(OWWidget):
         if self.vertices.X.shape[0] ==0:   
             self.vertices = None
         if self.edges.X.shape[0] ==0:   
-            self.vertices = None
+            self.edges = None
                     
     # send the network created to output signal    
     def send_output(self):
