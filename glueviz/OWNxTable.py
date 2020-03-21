@@ -42,7 +42,7 @@ class OWNxTable(OWWidget):
         inform = Msg("{}")
         
     want_main_area = False
-    # Remove nodes without any edge
+    # Remove nodes without any edge, or force reindexing of vertices for subset
     removeNodes = Setting(1)
 
     def __init__(self):
@@ -64,20 +64,19 @@ class OWNxTable(OWWidget):
         self.infoc = gui.widgetLabel(box, "Please connect to vertices and edges widgets.")
         self.infod = gui.widgetLabel(box, "No vertex deleted on output.")       
         self.infoe = gui.widgetLabel(box, "No edge deleted on output.") 
-        self.infof = gui.widgetLabel(box, "")               
               
         gui.checkBox(box, self, "removeNodes", "Remove nodes without any edge.")
 
     @Inputs.vertices
     def set_vertices(self, vertices):
-        # clear messages
+        # clear messages for every change of inputs
         self.Information.clear()
         self.Warning.clear()
         self.Error.clear()
         
-        if self.verticesDeleted>0:
+        if self.verticesDeleted > 0:
             # need to clear edges input and reconnect again
-            if self.inputChanged ==0:
+            if self.inputChanged == 0:
                 self.edges = None
                 self.infob.setText("No edge on input." )
                 self.Warning.inform("Edges're cleared automatically, please reconnect to edges.")
@@ -85,7 +84,6 @@ class OWNxTable(OWWidget):
             self.infoe.setText("") 
             # increase the flag, so that vertices won't be set to None while setting edges next time 
             self.inputChanged +=1                
-            # return
         if  vertices is not None and \
             len(vertices.domain.attributes) == 0 and len(vertices.domain.metas) == 0:
             self.Warning.inform("No vertex attribute on input.")            
@@ -96,22 +94,22 @@ class OWNxTable(OWWidget):
             self.infoa.setText("%d vertices on input." % self.vertices.X.shape[0])
         else:
             self.infoa.setText("No vertex on input.")
-            self.infod.setText("No vertex deleted on output.")
-            self.infoe.setText("No edge deleted on output.")        
+        self.infod.setText("No vertex deleted on output.")
+        self.infoe.setText("No edge deleted on output.")        
 
         self.update_network()
         self.send_output()
 
     @Inputs.edges
     def set_edges(self, edges):
-        # clear messages
+        # clear messages for every change of inputs
         self.Information.clear()
         self.Warning.clear()
         self.Error.clear()
         
-        if self.verticesDeleted>0:
+        if self.verticesDeleted > 0:
             # need to clear vertices input and reconnect again
-            if self.inputChanged ==0:
+            if self.inputChanged == 0:
                 self.vertices = None
                 self.infoa.setText("No vertex on input.")
                 self.Warning.inform("Vertices're cleared automatically, please reconnect to vertices.")                
@@ -119,7 +117,6 @@ class OWNxTable(OWWidget):
             self.infoe.setText("")
             # increase the flag, so that edges won't be set to None while setting edges next time             
             self.inputChanged +=1                
-            # return
         if edges is not None:
             sourceCol = None; targetCol = None
             for i,attr in enumerate(edges.domain.attributes):
@@ -136,8 +133,8 @@ class OWNxTable(OWWidget):
             self.infob.setText("%d edges on input." % self.edges.X.shape[0]) 
         else:
             self.infob.setText("No edge on input." )
-            self.infod.setText("No vertex deleted on output.")
-            self.infoe.setText("No edge deleted on output.")
+        self.infod.setText("No vertex deleted on output.")
+        self.infoe.setText("No edge deleted on output.")
             
         self.update_network()
         self.send_output()
@@ -156,22 +153,35 @@ class OWNxTable(OWWidget):
             return
         
         # check if there's an id column, and add one if necessary
+        # sometimes orange3-network exports items without an id column        
         self.check_id()
-        # sometimes orange3-network exports items without an id column
-        # delete the edges without nodes or nodes without any edge
-        self.clean_network()
         
-        if self.edges is None:
-            self.Warning.inform("No edges left after cleaning.")
-
-        if self.vertices is None:
-            self.Error.inform("No vertex left after cleaning.")            
-            self.infof.setText("" )            
+        # check whether it's a vertices subset
+        try:        # vertices table has more than one column
+            maxid = max(self.vertices.X[:,0].max(),self.edges.X[:,0].max(),\
+                            self.edges.X[:,1].max())+1
+        except:     # vertices table has only one column
+             maxid = max(self.vertices.X.max(),self.edges.X[:,0].max(),\
+                            self.edges.X[:,1].max())+1
+        # it's a subset of vertices, force to reindex vertices
+        if int(maxid)>self.vertices.X.shape[0]:
+            self.removeNodes = 1
+            
+        # delete the edges without nodes or nodes without any edge
+        # or force reindexing of vertices for subset
+        self.clean_network()
+        # check again
+        if self.edges is None or self.vertices is None:
+            if self.edges is None:            
+                self.Warning.inform("No edge left after cleaning.")
+            if self.vertices is None:
+                self.Error.inform("No vertex left after cleaning.")            
             self.network = None
             self.original_nodes = None
+            # reset the flag
             self.inputChanged = 0            
             return
-            
+               
         # get labels of vertices
         vertices_tb = self.vertices
         namecol = None
@@ -229,7 +239,6 @@ class OWNxTable(OWWidget):
             self.Error.inform("Wrong data, no network is created." )
             self.infod.setText("No vertex deleted on output.")
             self.infoe.setText("No edge deleted on output.")
-            self.infof.setText("")            
         else:
             self.infoc.setText("A network named %s is created." % self.network.name)
             if self.verticesDeleted>0:
@@ -237,12 +246,12 @@ class OWNxTable(OWWidget):
                 self.Information.inform("Vertices ids're reindexed.")                
             else:
                 self.infod.setText("No vertex deleted on output.")
-                self.infof.setText("")                                
             if self.edgesDeleted>0:
                 self.infoe.setText("%d edges with vertex out of range are deleted on output." % self.edgesDeleted)
             else:
                 self.infoe.setText("No edge deleted on output.")
-                
+          
+        # reset the flag
         self.inputChanged =0               
 
 
