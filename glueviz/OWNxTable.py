@@ -9,7 +9,7 @@ import numpy as np
 import scipy.sparse as sp
 from Orange.widgets import gui
 from Orange.widgets.utils.widgetpreview import WidgetPreview
-from Orange.widgets.widget import OWWidget, Input, Output
+from Orange.widgets.widget import OWWidget, Msg, Input, Output
 from orangecontrib.network.network.base import Network, EdgeType
 from Orange.widgets.settings import Setting, ContextSetting
 from Orange.data import (
@@ -32,7 +32,15 @@ class OWNxTable(OWWidget):
         vertices = Output("Vertices", Table)
         edges = Output("Edges", Table)
 
-       
+    class Information(OWWidget.Information):
+        inform = Msg("{}")
+
+    class Warning(OWWidget.Warning):
+        inform = Msg("{}")
+
+    class Error(OWWidget.Error):
+        inform = Msg("{}")
+        
     want_main_area = False
     # Remove nodes without any edge
     removeNodes = Setting(1)
@@ -47,6 +55,7 @@ class OWNxTable(OWWidget):
         self.original_nodes = None
         self.verticesDeleted = 0
         self.edgesDeleted = 0
+        self.inputChanged = 0
 
         # GUI
         box = gui.widgetBox(self.controlArea, "Info")
@@ -61,12 +70,25 @@ class OWNxTable(OWWidget):
 
     @Inputs.vertices
     def set_vertices(self, vertices):
+        # clear messages
+        self.Information.clear()
+        self.Warning.clear()
+        self.Error.clear()
+        
         if self.verticesDeleted>0:
-            self.infof.setText("Vertices ids are reindexed, please delete & create the widget again!")
-            return
+            # need to clear edges input and reconnect again
+            if self.inputChanged ==0:
+                self.edges = None
+                self.infob.setText("No edge on input." )
+                self.Warning.inform("Edges're cleared automatically, please reconnect to edges.")
+            self.infod.setText("")
+            self.infoe.setText("") 
+            # increase the flag, so that vertices won't be set to None while setting edges next time 
+            self.inputChanged +=1                
+            # return
         if  vertices is not None and \
             len(vertices.domain.attributes) == 0 and len(vertices.domain.metas) == 0:
-            self.infoa.setText("No vertex attribute on input.")
+            self.Warning.inform("No vertex attribute on input.")            
             return
         self.vertices = vertices
         self.auto_data = vertices
@@ -82,9 +104,22 @@ class OWNxTable(OWWidget):
 
     @Inputs.edges
     def set_edges(self, edges):
+        # clear messages
+        self.Information.clear()
+        self.Warning.clear()
+        self.Error.clear()
+        
         if self.verticesDeleted>0:
-            self.infof.setText("Vertices ids are indexed, please delete & create the widget again!")
-            return
+            # need to clear vertices input and reconnect again
+            if self.inputChanged ==0:
+                self.vertices = None
+                self.infoa.setText("No vertex on input.")
+                self.Warning.inform("Vertices're cleared automatically, please reconnect to vertices.")                
+            self.infod.setText("")
+            self.infoe.setText("")
+            # increase the flag, so that edges won't be set to None while setting edges next time             
+            self.inputChanged +=1                
+            # return
         if edges is not None:
             sourceCol = None; targetCol = None
             for i,attr in enumerate(edges.domain.attributes):
@@ -93,7 +128,7 @@ class OWNxTable(OWWidget):
                 if attr.name=="target":
                     targetCol = attr
             if sourceCol is None or targetCol is None:
-                self.infob.setText("No source or target column on edges input." )
+                self.Warning.inform("No source or target column on edges input.")                            
                 return
         
         self.edges = edges
@@ -126,6 +161,17 @@ class OWNxTable(OWWidget):
         # delete the edges without nodes or nodes without any edge
         self.clean_network()
         
+        if self.edges is None:
+            self.Warning.inform("No edges left after cleaning.")
+
+        if self.vertices is None:
+            self.Error.inform("No vertex left after cleaning.")            
+            self.infof.setText("" )            
+            self.network = None
+            self.original_nodes = None
+            self.inputChanged = 0            
+            return
+            
         # get labels of vertices
         vertices_tb = self.vertices
         namecol = None
@@ -180,19 +226,25 @@ class OWNxTable(OWWidget):
             self.network = None
             self.original_nodes = None
         if self.network is None:
-            self.infoc.setText("Wrong data, no network is created." )
+            self.Error.inform("Wrong data, no network is created." )
             self.infod.setText("No vertex deleted on output.")
             self.infoe.setText("No edge deleted on output.")
+            self.infof.setText("")            
         else:
             self.infoc.setText("A network named %s is created." % self.network.name)
             if self.verticesDeleted>0:
-                self.infod.setText("%d vertices without any edge are deleted on output, ids're reindexed." % self.verticesDeleted)
+                self.infod.setText("%d vertices without any edge are deleted on output." % self.verticesDeleted)
+                self.Information.inform("Vertices ids're reindexed.")                
             else:
                 self.infod.setText("No vertex deleted on output.")
+                self.infof.setText("")                                
             if self.edgesDeleted>0:
                 self.infoe.setText("%d edges with vertex out of range are deleted on output." % self.edgesDeleted)
             else:
                 self.infoe.setText("No edge deleted on output.")
+                
+        self.inputChanged =0               
+
 
 
     # check if there's an id column of the vertices table, and creat one if it's necessary
@@ -256,7 +308,8 @@ class OWNxTable(OWWidget):
         # delete nodes without any edge
         removeNodes = self.removeNodes
         if removeNodes:
-            nodes = set(list(edges_tb.X[:,0])) | set(list(edges_tb.X[:,1]))            
+            # nodes = set(list(edges_tb.X[:,0])) | set(list(edges_tb.X[:,1])) 
+            nodes = set(list(X1[:,0])) | set(list(X1[:,1]))
             X2=vertices_tb.X; Y2=vertices_tb.Y; W2=vertices_tb.W; metas2 = vertices_tb.metas            
             todelete=[]
             try:
@@ -300,7 +353,11 @@ class OWNxTable(OWWidget):
         self.vertices.domain.attributes[0].number_of_decimals = 0
         self.edges.domain.attributes[0].number_of_decimals = 0
         self.edges.domain.attributes[1].number_of_decimals = 0
-           
+        # check if it's empty graph after cleaning
+        if self.vertices.X.shape[0] ==0:   
+            self.vertices = None
+        if self.edges.X.shape[0] ==0:   
+            self.vertices = None
                     
     # send the network created to output signal    
     def send_output(self):
@@ -318,6 +375,6 @@ class OWNxTable(OWWidget):
 if __name__ == "__main__":
     # Just for widget debugging
     WidgetPreview(OWNxTable).run(
-        set_vertices=Table("D:/JetBrains/IdeaProjects/MyPyhton38/scripts/air-vertices2"),
-        set_edges=Table("D:/JetBrains/IdeaProjects/MyPyhton38/scripts/air-edges2")
+        set_vertices=Table("D:/JetBrains/IdeaProjects/MyPyhton38/scripts/Python-vertices2"),
+        set_edges=Table("D:/JetBrains/IdeaProjects/MyPyhton38/scripts/Python-edges2")
     )
