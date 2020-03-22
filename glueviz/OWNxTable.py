@@ -156,7 +156,7 @@ class OWNxTable(OWWidget):
         # sometimes orange3-network exports items without an id column        
         self.check_id()
         
-        # check whether it's a vertices subset
+        # check whether it's a vertices subset or not
         try:        # vertices table has more than one column
             maxid = max(self.vertices.X[:,0].max(),self.edges.X[:,0].max(),\
                             self.edges.X[:,1].max())+1
@@ -206,11 +206,11 @@ class OWNxTable(OWWidget):
             weights = np.array([1.0]*edges_tb.X.shape[0])
         else:
             weights = edges_tb.X[:,i].astype(np.float64)
-        # create a sparce mattrix of the network
+        # create a sparse mattrix of the network
         co_matrix = sp.coo_matrix((weights, 
                 (edges_tb.X[:,0].astype(np.int), edges_tb.X[:,1].astype(np.int))),
                 shape=(nvertices, nvertices))
-        # determin whether it's directed
+        # determin whether it's directed or not
         isDirectedCol = None        
         for i,attr in enumerate(edges_tb.domain.attributes):
             if attr.name=="isDirected":
@@ -224,7 +224,7 @@ class OWNxTable(OWWidget):
             netname = edges_tb.name[:edges_tb.name.index("*")]
         except:
             netname = "UNKNOWN"
-        # create the network
+        # create the network, without coordinate data, network explorer will arrange it.
         try:
             network = Network(labels, edges, netname, None)
             self.network = network
@@ -241,15 +241,16 @@ class OWNxTable(OWWidget):
             self.infoe.setText("No edge deleted on output.")
         else:
             self.infoc.setText("A network named %s is created." % self.network.name)
+            if self.edgesDeleted>0:
+                self.infoe.setText("%d edges with vertex out of range are deleted on output." % self.edgesDeleted)
+                self.Information.inform("Edges with ids out of vertices range are deleted.")                                
+            else:
+                self.infoe.setText("No edge deleted on output.")            
             if self.verticesDeleted>0:
                 self.infod.setText("%d vertices without any edge are deleted on output." % self.verticesDeleted)
                 self.Information.inform("Vertices ids're reindexed.")                
             else:
                 self.infod.setText("No vertex deleted on output.")
-            if self.edgesDeleted>0:
-                self.infoe.setText("%d edges with vertex out of range are deleted on output." % self.edgesDeleted)
-            else:
-                self.infoe.setText("No edge deleted on output.")
           
         # reset the flag
         self.inputChanged =0               
@@ -317,7 +318,6 @@ class OWNxTable(OWWidget):
         # delete nodes without any edge
         removeNodes = self.removeNodes
         if removeNodes:
-            # nodes = set(list(edges_tb.X[:,0])) | set(list(edges_tb.X[:,1])) 
             nodes = set(list(X1[:,0])) | set(list(X1[:,1]))
             X2=vertices_tb.X; Y2=vertices_tb.Y; W2=vertices_tb.W; metas2 = vertices_tb.metas            
             todelete=[]
@@ -337,7 +337,7 @@ class OWNxTable(OWWidget):
             except:
                 pass
                         
-            # Reindex vertices ids and edges source and target
+            # Reindex vertices ids and update edges' source and target
             XV = X2[:,0].astype(np.int) ; XE = X1[:,[0,1]].astype(np.int)
             # sort is important for reindexing
             nodes = list(XV)
@@ -384,6 +384,6 @@ class OWNxTable(OWWidget):
 if __name__ == "__main__":
     # Just for widget debugging
     WidgetPreview(OWNxTable).run(
-        set_vertices=Table("D:/JetBrains/IdeaProjects/MyPyhton38/scripts/Python-vertices2"),
-        set_edges=Table("D:/JetBrains/IdeaProjects/MyPyhton38/scripts/Python-edges2")
+        set_vertices=Table("D:/JetBrains/IdeaProjects/MyPyhton38/scripts/karate-vertices"),
+        set_edges=Table("D:/JetBrains/IdeaProjects/MyPyhton38/scripts/karate-edges")
     )
