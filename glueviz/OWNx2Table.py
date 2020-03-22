@@ -8,7 +8,7 @@ Created on Tue Mar 17 10:40:39 2020
 import numpy as np
 from Orange.widgets import gui
 from Orange.widgets.utils.widgetpreview import WidgetPreview
-from Orange.widgets.widget import OWWidget, Input, Output
+from Orange.widgets.widget import OWWidget, Msg, Input, Output
 from orangecontrib.network.network.base import Network
 from orangecontrib.network.network.readwrite import read_pajek
 from Orange.data import (
@@ -29,6 +29,8 @@ class OWNx2Table(OWWidget):
         vertices = Output("Vertices", Table)
         edges = Output("Edges", Table)
 
+    class Information(OWWidget.Information):
+        inform = Msg("{}")
        
     want_main_area = False
 
@@ -80,6 +82,7 @@ class OWNx2Table(OWWidget):
                 domain = Domain([ContinuousVariable("id")], nodes.domain.class_vars, nodes.domain.metas)
                 vertices = Table.from_numpy(domain,X,nodes.Y,nodes.metas,nodes.W)
                 self.vertices = vertices
+                self.Information.inform("No attribute column of the vertices table, an id column is added.")
             else:                                   # check if there's an id column
                 idcol = None
                 for i,attr in enumerate(nodes.domain.attributes):
@@ -97,6 +100,7 @@ class OWNx2Table(OWWidget):
                     domain = Domain(attrs,nodes.domain.class_vars,nodes.domain.metas)
                     vertices = Table.from_numpy(domain,X,nodes.Y,nodes.metas,nodes.W)
                     self.vertices = vertices
+                    self.Information.inform("No id column of the vertices table, an id column is added.")                    
                 else:               # there's an id column already
                     self.vertices = nodes
         else:                       # it's an label array of nodes, so add an id column
@@ -113,6 +117,7 @@ class OWNx2Table(OWWidget):
                 vertices = Table.from_numpy(domain,X,None,nodes,None)
                 
             self.vertices = vertices
+            self.Information.inform("Label array to vertices table, an id column is added.")
         
         # create the edges data table from sparse matrix
         edges = network.edges
