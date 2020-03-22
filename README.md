@@ -94,5 +94,11 @@ Fix a bug of the Network From Tables widget in clean_network():
             # nodes = set(list(edges_tb.X[:,0])) | set(list(edges_tb.X[:,1])) 
             nodes = set(list(X1[:,0])) | set(list(X1[:,1]))
 
+Mar,22,2020
+
+Modify the "Network To Tables" widget to add important information icon upon widget icon 
+in canvas workflow.
+
+
 
        
