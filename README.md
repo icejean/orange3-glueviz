@@ -107,6 +107,11 @@ There's an issue of igraph-python that labels wouldn't be shown in Spyder(Ipytho
 it's mentioned here: https://github.com/igraph/python-igraph/issues/185, and the 
  work around is here: https://stackoverflow.com/questions/30640489/issue-plotting-vertex-labels-using-igraph-in-ipython.
  
+Mar,23,2020
 
+Modify the "Network From Tables" widget to remember original vertices and edges input,
+so that when vertices ids are reindexed and vertices or edges input is changed later,
+the widget can reference and recompute again, no need to delete and reconnect the other one's
+input to get the original data again.
 
        
