@@ -100,12 +100,12 @@ Modify the "Network To Tables" widget to add important information icon upon wid
 in canvas workflow.
 
 Add an example to construct a network with igraph-python from the scratch, then
-transform into vertices and edges tables, pass to Orange,read ./example/test1-igraph1.py
+transform into vertices and edges tables, pass to Orange,read ./example/test-igraph1.py
  and python.ows for details.
  
-There's an issue of igraph-python that labels wouldn't be shown in Spyder(Ipython inline),
+There's an issue of igraph-python that labels wouldn't be shown in Spyder(IPython inline),
 it's mentioned here: https://github.com/igraph/python-igraph/issues/185, and the 
- work around is here: https://stackoverflow.com/questions/30640489/issue-plotting-vertex-labels-using-igraph-in-ipython.
+ workaround is here: https://stackoverflow.com/questions/30640489/issue-plotting-vertex-labels-using-igraph-in-ipython.
  
 Mar,23,2020
 
