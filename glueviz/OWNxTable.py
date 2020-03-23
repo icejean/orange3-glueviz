@@ -50,12 +50,13 @@ class OWNxTable(OWWidget):
         # Design copied from orangecontrib.network.widgets.OWNxFile.py
         self.vertices = None
         self.edges = None
-        self.auto_data = None        
         self.network = None       
-        self.original_nodes = None
         self.verticesDeleted = 0
         self.edgesDeleted = 0
         self.inputChanged = 0
+        # save for reindexed network, referenced when the input vertices or edges is changed.
+        self.original_vertices = None
+        self.original_edges = None
 
         # GUI
         box = gui.widgetBox(self.controlArea, "Info")
@@ -77,11 +78,13 @@ class OWNxTable(OWWidget):
         if self.verticesDeleted > 0:
             # need to clear edges input and reconnect again
             if self.inputChanged == 0:
-                self.edges = None
-                self.infob.setText("No edge on input." )
-                self.Warning.inform("Edges're cleared automatically, please reconnect to edges.")
-            self.infod.setText("")
-            self.infoe.setText("") 
+                # restore original edges
+                self.edges = self.original_edges
+                if self.edges is not None:
+                    self.infob.setText("%d edges on input." % self.edges.X.shape[0])
+                else:
+                    self.infob.setText("No edge on input.")
+                self.Warning.inform("Original edges input is restored automatically.")
             # increase the flag, so that vertices won't be set to None while setting edges next time 
             self.inputChanged +=1                
         if  vertices is not None and \
@@ -89,7 +92,7 @@ class OWNxTable(OWWidget):
             self.Warning.inform("No vertex attribute on input.")            
             return
         self.vertices = vertices
-        self.auto_data = vertices
+        self.original_vertices = vertices
         if self.vertices is not None:
             self.infoa.setText("%d vertices on input." % self.vertices.X.shape[0])
         else:
@@ -110,11 +113,13 @@ class OWNxTable(OWWidget):
         if self.verticesDeleted > 0:
             # need to clear vertices input and reconnect again
             if self.inputChanged == 0:
-                self.vertices = None
-                self.infoa.setText("No vertex on input.")
-                self.Warning.inform("Vertices're cleared automatically, please reconnect to vertices.")                
-            self.infod.setText("")
-            self.infoe.setText("")
+                # restore original vertices
+                self.vertices = self.original_vertices
+                if self.vertices is not None:
+                    self.infob.setText("%d vertices on input." % self.vertices.X.shape[0])
+                else:
+                    self.infob.setText("No vertex on input.")
+                self.Warning.inform("Origianl vertices input is restored automatically.")                
             # increase the flag, so that edges won't be set to None while setting edges next time             
             self.inputChanged +=1                
         if edges is not None:
@@ -129,6 +134,7 @@ class OWNxTable(OWWidget):
                 return
         
         self.edges = edges
+        self.original_edges = edges
         if self.edges is not None:
             self.infob.setText("%d edges on input." % self.edges.X.shape[0]) 
         else:
@@ -149,7 +155,6 @@ class OWNxTable(OWWidget):
             if self.edges is None and self.vertices is None:
                 self.infoc.setText("Please connect to vertices and edges widgets." )                
             self.network = None
-            self.original_nodes = None
             return
         
         # check if there's an id column, and add one if necessary
@@ -172,12 +177,15 @@ class OWNxTable(OWWidget):
         self.clean_network()
         # check again
         if self.edges is None or self.vertices is None:
-            if self.edges is None:            
+            if self.edges is None:
+                self.infoe.setText("No edge left after cleaning.")
                 self.Warning.inform("No edge left after cleaning.")
             if self.vertices is None:
+                self.infod.setText("No vertex left after cleaning.")                
                 self.Error.inform("No vertex left after cleaning.")            
             self.network = None
-            self.original_nodes = None
+            self.infoc.setText("No network is created.")
+            self.Information.inform("No network is created.")            
             # reset the flag
             self.inputChanged = 0            
             return
@@ -231,10 +239,8 @@ class OWNxTable(OWWidget):
             # set node attributes here, so that network explorer can reference later
             # it's the vertices' Orange Table directly
             self.network.nodes = self.vertices
-            self.original_nodes = self.network.nodes
         except:
             self.network = None
-            self.original_nodes = None
         if self.network is None:
             self.Error.inform("Wrong data, no network is created." )
             self.infod.setText("No vertex deleted on output.")
