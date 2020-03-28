@@ -171,6 +171,7 @@ class OWNxTable(OWWidget):
         # it's a subset of vertices, force to reindex vertices
         if int(maxid)>self.vertices.X.shape[0]:
             self.removeNodes = 1
+            self.Information.inform("Vertices ids're reindexed.")
             
         # delete the edges without nodes or nodes without any edge
         # or force reindexing of vertices for subset
