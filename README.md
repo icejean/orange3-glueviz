@@ -28,7 +28,7 @@ If you need to pass data sets to Orange from Spyder,
 read the documents in ./doc and hack Orange as it is mentioned.
 The two files of Orange need to be modified is there already, just copy and past.
 
-Mar,10,2020
+Mar,10th,2020
 
 Add a widget named "network from tables" to connect Spyder igraph-python to
 orange3-network add on. Please refer to ./example for examples and ./docs for
@@ -48,7 +48,7 @@ of the DirectedEdges() class, you can copy the file in ./spyder-orange3 directly
                # the original line is wrong
                # + self.compute_degrees(self.in_edges, weighted)
 
-Mar,15,2020
+Mar,15th,2020
 
 Add support of vertices & edges selection to the "Network From Tables" widget
 through a checkbox on widget GUI and a clean_network() function to verify
@@ -61,7 +61,7 @@ any edge" check box automatically to force reindexing the ids of vertices, or yo
 index out of range exception when creating the network, as the id values may exceed
 the range of the underlying sparse array.
  
-Mar,16,2020
+Mar,16th,2020
 
 Address the issue of displaying vertices ids as real through setting the decimal
 of orange.data.variable.ContinuousVariable to 0, now it's integer as required.
@@ -72,7 +72,7 @@ of orange.data.variable.ContinuousVariable to 0, now it's integer as required.
         self.edges.domain.attributes[0].number_of_decimals = 0
         self.edges.domain.attributes[1].number_of_decimals = 0
 
-Mar,18,2020
+Mar,18th,2020
         
 Add a widget "Network To Tables" to transform a network into vertices & edges data
 tables.
@@ -80,7 +80,7 @@ Add check to "Network From Tables" widget to check inputs and create an id colum
 for vertices table if it's necessary.
 Update the icons for these two widgets.
 
-Mar,21,2020
+Mar,21th,2020
 
 Modify the "Network From Tables" widget to accept changes from the inputs,
 without deleting and creating a new widget again. 
@@ -94,7 +94,7 @@ Fix a bug of the Network From Tables widget in clean_network():
             # nodes = set(list(edges_tb.X[:,0])) | set(list(edges_tb.X[:,1])) 
             nodes = set(list(X1[:,0])) | set(list(X1[:,1]))
 
-Mar,22,2020
+Mar,22th,2020
 
 Modify the "Network To Tables" widget to add important information icon upon widget icon 
 in canvas workflow.
@@ -115,7 +115,7 @@ the widget can reference and recompute again, no need to delete and reconnect th
 input to get the original data again.
 
 
-May,22,2020
+May,22th,2020
 
 Add modifications to Orange Geo, all is in the ./geo directory. 
 
@@ -143,3 +143,9 @@ admin1-IND.json for use in China.
 
 7. The file AddressSeg.py is examples of geocoding with several major providers in China, you should
 replace the access key of provider www.tianditu.gov.cn with your own in it.
+
+8. There're  four examples of Orange Geo in the ./geo/example directory. covid-19.py prepares data for 
+covid-19-CN-Cities.ows with admin0`2, and ChinaCountyExample.py prepares data for ChinaCountyExample.ows
+ with admin0`3 and GuangDongTownsExample.ows with admin0~4. The covid-19-USA.ows is admin0~2 in animation.
+ Data needed for the examples is in ./geo/example/data, you may need to modify the ows files for the 
+ change of data directory.
