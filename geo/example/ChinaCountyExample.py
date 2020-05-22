@@ -99,35 +99,3 @@ xzsj = xzsj.loc[~xzsj.xzjd.isna()]
 # 输出数据去作图
 xzsj.to_csv("D:/temp/广东省2107年乡镇统计数据2.csv",index=False,encoding="utf-8")
 
-
-
-
-
-
-
-xztj = pd.read_csv("D:/temp/广东省2107年乡镇统计数据.csv",encoding="gbk")
-
-types ={"STREET_ID":int,"STREET_CODE":str,"AREA_CODE":str,"STREET_NAME":str,"SHORT_NAME":str,\
-        "LNG":str,"LAT":str,"SORT":int,"GMT_CREATE":str,"GMT_MODIFIED":str,"MEMO":str,\
-            "DATA_STATE":int,"TENANT_CODE":str}
-coord_xz = pd.read_csv("D:/temp/税务登记地址/bs_street.csv",encoding="utf-8",dtype=types)
-coord_xz = coord_xz[["AREA_CODE","STREET_CODE","STREET_NAME","LNG","LAT"]]
-coord_xz = coord_xz[(coord_xz.AREA_CODE>'440000') & (coord_xz.AREA_CODE<'450000')]
-coord_xz = coord_xz.reset_index(drop=True)
-
-types ={"adcode":str,"name":str,"lng":float,"lat":float}
-adcode = pd.read_csv("D:/temp/geojson/行政区域代码坐标.csv",encoding="gbk",dtype=types)
-adcode2 = adcode.loc[~adcode.adcode.str.contains("00")&(~adcode.adcode.str.contains("0000"))]
-adcode2 = adcode2[["adcode","name"]]
-adcode2 = adcode2[(adcode2.adcode>'440000') & (adcode2.adcode<'450000')]
-adcode2 = adcode2.sort_values("adcode")
-adcode2 = adcode2.reset_index(drop=True)
-coords = pd.merge(adcode2,coord_xz,left_on="adcode",right_on="AREA_CODE",how="right")
-coords2 = coords.loc[coords.name.isna()]
-coords = coords.loc[~coords.name.isna()]
-coords["name2"] = coords["name"]+coords["STREET_NAME"]
-coords = coords[["name2","LNG","LAT"]]
-xzsj = pd.merge(xztj,coords,left_on="name",right_on="name2", how="left")
-xzsj2 = xzsj.loc[xzsj.name2.isna()]
-xzsj = xzsj.loc[~xzsj.name2.isna()]
-xzsj.to_csv("D:/temp/广东省2107年乡镇统计数据2.csv",index=False,encoding="utf-8")
