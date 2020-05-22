@@ -128,7 +128,7 @@ replace the access key of tile provider www.tianditu.gov.cn with your own in plo
 
 3. geojson/admin0.json, geojson/admin1-CHN.json, geojson/admin1-IND.json, the GeoJSON file modified
 already for use in China, you can replace those in Anaconda3\Lib\site-packages\orangecontrib\geo\geojson
- with them directly.
+ with them directly, and delete admin1-TWN.json, admin1-HKG.json, admin1-MAC.json at the same time.
 
 4. You can download vector maps of China from https://www.gadm.org/download_country_v3.html, for admin2
  and admin3 level, transform into geojson format and named them as admin2-CHN.json and admin3-CHN.json, 
