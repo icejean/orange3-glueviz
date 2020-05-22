@@ -1,0 +1,122 @@
+1.orangecontrib.geo.widgets.plotutils.py
+TILE_PROVIDERS = {
+    ......
+    # Added by Jean 2020/05/21
+    "tianditu vector": _TileProvider(
+        url="https://t6.tianditu.gov.cn/vec_w/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=vec&STYLE=default&TILEMATRIXSET=w&FORMAT=tiles&TILECOL={x}&TILEROW={y}&TILEMATRIX={z}&tk=7d5cb12a05d8a8f5803ade71a590c91f",
+        attribution='&copy; <a href="https://www.tianditu.gov.cn/">tianditu.gov.cn</a>',
+        size=256,
+        max_zoom=18
+    ),
+    "tianditu satellite": _TileProvider(
+        url="https://t6.tianditu.gov.cn/img_w/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=img&STYLE=default&TILEMATRIXSET=w&FORMAT=tiles&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}&tk=7d5cb12a05d8a8f5803ade71a590c91f",
+        attribution='&copy; <a href="https://www.tianditu.gov.cn/">tianditu.gov.cn</a>',
+        size=256,
+        max_zoom=18
+    ),       
+    # Added by
+    # Added by Jean 2020/04/25
+    "GaodeStreetMap": _TileProvider(
+        url="http://wprd01.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=7&x={x}&y={y}&z={z}",        
+        attribution='&copy; <a href="http://map.amap.com/doc/serviceitem.html">高德地图</a>',
+        size=256,
+        max_zoom=18
+    ), 
+    # Added by Jean 2020/05/08
+    "ArcGIS": _TileProvider(
+        url="https://map.geoq.cn/arcgis/rest/services/ChinaOnlineCommunityENG/MapServer/tile/{z}/{y}/{x}",        
+        attribution='&copy; <a href="https://map.geoq.cn/arcgis/rest/services">ChinaOnlineCommunity</a>',
+        size=256,
+        max_zoom=18
+    ),          
+    # Added by Jean 2020/04/25    
+    "GaodeSatellite": _TileProvider(
+        url="http://wprd01.is.autonavi.com/appmaptile?style=8&x={x}&y={y}&z={z}",        
+        attribution='&copy; <a href="http://map.amap.com/doc/serviceitem.html">高德地图</a>',
+        size=256,
+        max_zoom=19
+    ),        
+    # Added by Jean 2020/05/02
+    "Basemaps light": _TileProvider(
+        url="http://basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png",
+        attribution='&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, &copy; <a href="https://carto.com/attributions">CARTO</a>',
+        size=256,
+        max_zoom=19
+    ),   
+    ......
+}
+
+
+class ImageLoader(QObject):
+......
+    def get(self, tile):
+        future = Future()
+        url = QUrl(tile.url)
+        request = QNetworkRequest(url)
+        # Modified by Jean 2020/05/21 to support tianditu.gov.cn
+        # request.setRawHeader(b"User-Agent", b"OWMap/1.0")
+        request.setRawHeader(b"User-Agent", b"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:76.0) Gecko/20100101 Firefox/76.0")
+
+
+2.orangecontrib.geo.widgets.owchoropleth.py
+# Modified by Jean 2020/04/25
+from Orange.widgets.settings import Setting, SettingProvider, rename_setting, \
+    DomainContextHandler, ContextSetting, migrate_str_to_variable
+from orangecontrib.geo.widgets.plotutils import MapMixin, MapViewBox, \
+    _TileProvider, TILE_PROVIDERS, DEFAULT_TILE_PROVIDER, deg2norm
+
+class OWChoroplethPlotMapGraph(MapMixin, OWChoroplethPlotGraph):
+    """
+    This just adds maps as background.
+    """
+    # Added by Jean 2020/04/25 for support of selecting Tile provider        
+    tile_provider_key = settings.Setting(DEFAULT_TILE_PROVIDER)
+
+    def __init__(self, widget, parent):
+        OWChoroplethPlotGraph.__init__(self, widget, parent)
+        MapMixin.__init__(self)
+        # Modiffied by Jean 2020/04/25 for support of selecting Tile provider                
+        # self._update_tile_provider(CHOROPLETH_TILE_PROVIDER)
+        self._update_tile_provider(TILE_PROVIDERS[DEFAULT_TILE_PROVIDER])
+
+    # Added by Jean 2020/04/25 for support of selecting Tile provider        
+    def update_tile_provider(self):
+        super()._update_tile_provider(TILE_PROVIDERS[self.tile_provider_key])
+
+
+class OWChoropleth(OWWidget):
+    def _add_controls(self):
+    ......
+        # Added by Jean 2020/04/25 for support of selecting Tile provider        
+        gui.comboBox(lat_lon_box, self, 'graph.tile_provider_key', label='Map:',
+                     items=list(TILE_PROVIDERS.keys()),
+                     callback=self.graph.update_tile_provider, **options)
+
+
+        # Modified by Jean 2020/05/13, set max to 4
+        a_slider = gui.hSlider(agg_box, self, 'admin_level', minValue=0,
+                               maxValue=4, step=1, label='Detail:',
+                               createLabel=False, callback=self.setup_plot)
+
+3.D:\Anaconda3\Lib\site-packages\orangecontrib\geo\mapper.py
+def init():
+......
+    # Modified by Jean 2020/05/13, add level 4
+    nearest_points = {0: [], 1: [], 2: [], 3: [], 4: []}
+    shapes = {0: [], 1: [], 2: [], 3: [], 4: []}
+......
+            # Added by Jean 2020/05/13
+            # Make Admin1 shapes available in Admin3 too. Except for CHN
+            # which is the country we have explicit Admin3 shapes for
+            if admin == 1 and cc !='CHN':
+                shapes[3].extend(tups)
+                nearest_points[3].extend(points)
+                shapes[4].extend(tups)
+                nearest_points[4].extend(points)
+......
+
+
+def latlon2region(latlon, admin=0):
+......
+    # Modified by Jean 2020/05/13
+    assert 0 <= admin <= 4
