@@ -114,4 +114,32 @@ so that when vertices ids are reindexed and vertices or edges input is changed l
 the widget can reference and recompute again, no need to delete and reconnect the other one's
 input to get the original data again.
 
-       
+
+May,22,2020
+
+Add modifications to Orange Geo, all is in the ./geo directory. 
+
+Notes:
+
+1. Modification_to_orange_geo.txt, details of the modifications.
+
+2. mapper.py and widgets/plotutils.py, widgets/owchoropleth.py, programs modified already. You should
+replace the access key of tile provider www.tianditu.gov.cn with your own in plotutils.py.
+
+3. geojson/admin0.json, geojson/admin1-CHN.json, geojson/admin1-IND.json, the GeoJSON file modified
+already for use in China, you can replace those in Anaconda3\Lib\site-packages\orangecontrib\geo\geojson
+ with them directly.
+
+4. You can download vector maps of China from https://www.gadm.org/download_country_v3.html, for admin2
+ and admin3 level, transform into geojson format and named them as admin2-CHN.json and admin3-CHN.json, 
+ then copy to the Anaconda3\Lib\site-packages\orangecontrib\geo\geojson directory for use.
+ 
+5. If you want admin4 support of China, you can buy map data from third party such as 
+http://www.dsac.cn/DataProduct/Index/2019, then named it as admin4-CHN.json, and copy it to the directory
+above.
+
+6. The file ChinaMap.py is the source to check and modify admin0.json and admin1-CHN.json, 
+admin1-IND.json for use in China.
+
+7. The file AddressSeg.py is examples of geocoding with several major providers in China, you should
+replace the access key of provider www.tianditu.gov.cn with your own in it.
