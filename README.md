@@ -150,4 +150,6 @@ covid-19-CN-Cities.ows with admin0-2, and ChinaCountyExample.py prepares data fo
  Data needed for the examples is in ./geo/example/data, you may need to modify the ows files for the 
  change of data directory.
  
- covid-19.py also transforms the admin2-3 shp files of China into GeoJSON format Orange Geo required.
+ ChinaCountyExample.py also transforms the admin3-4 shp files of China into GeoJSON format Orange Geo required,
+ and covid-19.py transforms admin2 shp file of China.
+ 
