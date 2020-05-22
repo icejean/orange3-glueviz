@@ -149,3 +149,5 @@ covid-19-CN-Cities.ows with admin0-2, and ChinaCountyExample.py prepares data fo
  with admin0-3 and GuangDongTownsExample.ows with admin0-4. The covid-19-USA.ows is admin0-2 in animation.
  Data needed for the examples is in ./geo/example/data, you may need to modify the ows files for the 
  change of data directory.
+ 
+ covid-19.py also transforms the admin2-3 shp files of China into GeoJSON format Orange Geo required.
