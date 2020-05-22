@@ -145,7 +145,7 @@ admin1-IND.json for use in China.
 replace the access key of provider www.tianditu.gov.cn with your own in it.
 
 8. There're  four examples of Orange Geo in the ./geo/example directory. covid-19.py prepares data for 
-covid-19-CN-Cities.ows with admin0`2, and ChinaCountyExample.py prepares data for ChinaCountyExample.ows
- with admin0`3 and GuangDongTownsExample.ows with admin0~4. The covid-19-USA.ows is admin0~2 in animation.
+covid-19-CN-Cities.ows with admin0-2, and ChinaCountyExample.py prepares data for ChinaCountyExample.ows
+ with admin0-3 and GuangDongTownsExample.ows with admin0-4. The covid-19-USA.ows is admin0-2 in animation.
  Data needed for the examples is in ./geo/example/data, you may need to modify the ows files for the 
  change of data directory.
