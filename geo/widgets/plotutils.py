@@ -79,13 +79,13 @@ TILE_PROVIDERS = {
     ),
     # Added by Jean 2020/05/21
     "tianditu vector": _TileProvider(
-        url="https://t6.tianditu.gov.cn/vec_w/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=vec&STYLE=default&TILEMATRIXSET=w&FORMAT=tiles&TILECOL={x}&TILEROW={y}&TILEMATRIX={z}&tk=7d5cb12a05d8a8f5803ade71a590c91f",
+        url="https://t6.tianditu.gov.cn/vec_w/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=vec&STYLE=default&TILEMATRIXSET=w&FORMAT=tiles&TILECOL={x}&TILEROW={y}&TILEMATRIX={z}&tk=your_key",
         attribution='&copy; <a href="https://www.tianditu.gov.cn/">tianditu.gov.cn</a>',
         size=256,
         max_zoom=18
     ),
     "tianditu satellite": _TileProvider(
-        url="https://t6.tianditu.gov.cn/img_w/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=img&STYLE=default&TILEMATRIXSET=w&FORMAT=tiles&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}&tk=7d5cb12a05d8a8f5803ade71a590c91f",
+        url="https://t6.tianditu.gov.cn/img_w/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=img&STYLE=default&TILEMATRIXSET=w&FORMAT=tiles&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}&tk=your_key",
         attribution='&copy; <a href="https://www.tianditu.gov.cn/">tianditu.gov.cn</a>',
         size=256,
         max_zoom=18
