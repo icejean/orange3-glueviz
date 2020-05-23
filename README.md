@@ -144,12 +144,23 @@ admin1-IND.json for use in China.
 7. The file AddressSeg.py is examples of geocoding with several major providers in China, you should
 replace the access key of provider www.tianditu.gov.cn with your own in it.
 
-8. There're  four examples of Orange Geo in the ./geo/example directory. covid-19.py prepares data for 
+8. There're  five examples of Orange Geo in the ./geo/example directory. covid-19.py prepares data for 
 covid-19-CN-Cities.ows with admin0-2, and ChinaCountyExample.py prepares data for ChinaCountyExample.ows
  with admin0-3 and GuangDongTownsExample.ows with admin0-4. The covid-19-USA.ows is admin0-2 in animation.
  Data needed for the examples is in ./geo/example/data, you may need to modify the ows files for the 
- change of data directory.
+ change of data directory. 
  
  ChinaCountyExample.py also transforms the admin3-4 shp files of China into GeoJSON format Orange Geo required,
- and covid-19.py transforms admin2 shp file of China.
+ and covid-19.py transforms admin2 shp file of China. Note that you need to buy the admin4-CHN.json data by yourself, 
+ it's illegal to publish it here without authorisation. As to the admin0 and admin1 files, they come from
+ natrual earth at http://www.naturalearthdata.com/downloads/ , and is free to be modified and published.
+   
+ The covid-19.ows example is a big example showing how to integrate all kinds of Orange widget components 
+ together, which is directly from three articles of the Orange team, and data is from https://github.com/CSSEGISandData/COVID-19 .
  
+ A. Data Mining COVID-19 Epidemics: Part 1 : https://orange.biolab.si/blog/2020/2020-04-02-covid-19-basic/
+ 
+ B. Data Mining COVID-19 Epidemics: Part 2 : https://orange.biolab.si/blog/2020/2020-04-09-covid-19-part-2/
+ 
+ C. Data Mining COVID-19 Epidemics: Part 3 : https://orange.biolab.si/blog/2020/2020-4-015-covid-19-part-3/
+
