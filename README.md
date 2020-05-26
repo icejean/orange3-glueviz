@@ -164,3 +164,6 @@ covid-19-CN-Cities.ows with admin0-2, and ChinaCountyExample.py prepares data fo
  
  C. Data Mining COVID-19 Epidemics: Part 3 : https://orange.biolab.si/blog/2020/2020-4-015-covid-19-part-3/
 
+May,26th,2020
+
+Add an example of customized business map for taxation data base on admin4-CHN.json of GuangDong province.
