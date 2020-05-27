@@ -42,7 +42,7 @@ def TDGeoCode(address):
         
 # 高德地图，解释各区分局地址为坐标，并在地图上标示
 def geocode(address):
-    parameters = {'address': address, 'key': '9fdf0730355e6f834499edf349161769'}
+    parameters = {'address': address, 'key': 'your gaode key'}
     url = 'https://restapi.amap.com/v3/geocode/geo?parameters'
     response = requests.get(url, parameters)
     # answer = response.geocodes['location']
