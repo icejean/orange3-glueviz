@@ -166,4 +166,10 @@ covid-19-CN-Cities.ows with admin0-2, and ChinaCountyExample.py prepares data fo
 
 May,26th,2020
 
-Add an example of customized business map for taxation data base on admin4-CHN.json of GuangDong province.
+Add an example of customized business map for taxation data base on admin4-CHN.json of GuangDong province, 
+at ./geo/example/ZhuHaiShuiWu.py.
+
+May, 28th, 2020
+
+Add an example of using geocode and tile maps from www.tianditu.gov.cn, functions called are in ./geo/TianDiTu.py
+, and usage is at ./geo/example/AddressShuiWu.py.
