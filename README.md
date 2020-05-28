@@ -172,4 +172,4 @@ at ./geo/example/ZhuHaiShuiWu.py.
 May, 28th, 2020
 
 Add an example of using geocode and tile maps from www.tianditu.gov.cn, functions called are in ./geo/TianDiTu.py
-, and usage is at ./geo/example/AddressShuiWu.py.
+, and usage is at ./geo/example/AddressShuiWu.py, workfolw file of Orange is ./geo/example/ZhuHaiShuiWuAddress.ows.
