@@ -1,0 +1,169 @@
+<?xml version='1.0' encoding='utf-8'?>
+<scheme description="" title="" version="2.0">
+	<nodes>
+		<node id="0" name="CSV File Import" position="(150, 150)" project_name="Orange3" qualified_name="Orange.widgets.data.owcsvimport.OWCSVFileImport" title="部分已转换好的测试数据:   税务登记地址坐标.csv" version="" />
+		<node id="1" name="Data Table" position="(300, 150)" project_name="Orange3" qualified_name="Orange.widgets.data.owtable.OWDataTable" title="浏览数据 选择几户纳税人" version="" />
+		<node id="2" name="Geo Map" position="(750, 300)" project_name="Orange3-Geo" qualified_name="orangecontrib.geo.widgets.owmap.OWMap" title="直接用Geo Map标记显示" version="" />
+		<node id="3" name="Data Table" position="(450, 150)" project_name="Orange3" qualified_name="Orange.widgets.data.owtable.OWDataTable" title="浏览选择的纳税人" version="" />
+		<node id="4" name="Python Script" position="(900, 150)" project_name="Orange3" qualified_name="Orange.widgets.data.owpythonscript.OWPythonScript" title="用天地图JavaScript API标记显示" version="" />
+		<node id="5" name="Select Columns" position="(450, 300)" project_name="Orange3" qualified_name="Orange.widgets.data.owselectcolumns.OWSelectAttributes" title="删除坐标数据 测试地理编码服务" version="" />
+		<node id="6" name="Python Script" position="(600, 450)" project_name="Orange3" qualified_name="Orange.widgets.data.owpythonscript.OWPythonScript" title="调用天地图地理编码服务" version="" />
+		<node id="7" name="Geo Map" position="(900, 450)" project_name="Orange3-Geo" qualified_name="orangecontrib.geo.widgets.owmap.OWMap" title="直接用Geo Map标记显示" version="" />
+		<node id="8" name="Choropleth Map" position="(900, 300)" project_name="Orange3-Geo" qualified_name="orangecontrib.geo.widgets.owchoropleth.OWChoropleth" title="Choropleth Map 地理统计" version="" />
+		<node id="9" name="Data Table" position="(750, 450)" project_name="Orange3" qualified_name="Orange.widgets.data.owtable.OWDataTable" title="浏览地址解释结果" version="" />
+	</nodes>
+	<links>
+		<link enabled="true" id="0" sink_channel="Data" sink_node_id="1" source_channel="Data" source_node_id="0" />
+		<link enabled="true" id="1" sink_channel="Data" sink_node_id="3" source_channel="Selected Data" source_node_id="1" />
+		<link enabled="true" id="2" sink_channel="Data" sink_node_id="2" source_channel="Data" source_node_id="3" />
+		<link enabled="true" id="3" sink_channel="Data" sink_node_id="4" source_channel="Data" source_node_id="3" />
+		<link enabled="true" id="4" sink_channel="Data" sink_node_id="5" source_channel="Data" source_node_id="3" />
+		<link enabled="true" id="5" sink_channel="Data" sink_node_id="6" source_channel="Data" source_node_id="5" />
+		<link enabled="true" id="6" sink_channel="Data" sink_node_id="8" source_channel="Data" source_node_id="3" />
+		<link enabled="true" id="7" sink_channel="Data" sink_node_id="9" source_channel="Data" source_node_id="6" />
+		<link enabled="true" id="8" sink_channel="Data" sink_node_id="7" source_channel="Data" source_node_id="9" />
+	</links>
+	<annotations>
+		<text font-family="SimSun" font-size="16" id="0" rect="(81.0, 464.0, 278.0, 59.0)" type="text/plain">税务登记地址解释GIS应用实例</text>
+	</annotations>
+	<thumbnail />
+	<node_properties>
+		<properties format="literal" node_id="0">{'_session_items': [('D:/temp/税务登记地址/税务登记地址坐标.csv', {'encoding': 'utf-8', 'delimiter': ',', 'quotechar': '"', 'doublequote': True, 'skipinitialspace': True, 'quoting': 0, 'columntypes': [{'start': 0, 'stop': 6, 'value': 'Auto'}], 'rowspec': [{'start': 0, 'stop': 1, 'value': 'Header'}], 'decimal_separator': '.', 'group_separator': ''}), ('D:/temp/珠海市乡镇街道税务登记统计.csv', {'encoding': 'utf-8', 'delimiter': ',', 'quotechar': '"', 'doublequote': True, 'skipinitialspace': True, 'quoting': 0, 'columntypes': [{'start': 0, 'stop': 13, 'value': 'Auto'}], 'rowspec': [{'start': 0, 'stop': 1, 'value': 'Header'}], 'decimal_separator': '.', 'group_separator': ''})], 'controlAreaVisible': True, 'dialog_state': {'directory': 'D:/temp/税务登记地址', 'filter': 'Text - comma separated (*.csv, *)'}, 'savedWidgetGeometry': b'\x01\xd9\xd0\xcb\x00\x02\x00\x00\x00\x00\x02\x8a\x00\x00\x00\xf5\x00\x00\x03\xb5\x00\x00\x02V\x00\x00\x02\x92\x00\x00\x01\x14\x00\x00\x03\xad\x00\x00\x02N\x00\x00\x00\x00\x00\x00\x00\x00\x06@', '__version__': 1}</properties>
+		<properties format="pickle" node_id="1">gAN9cQAoWAsAAABhdXRvX2NvbW1pdHEBiVgOAAAAY29sb3JfYnlfY2xhc3NxAohYEgAAAGNvbnRy
+b2xBcmVhVmlzaWJsZXEDiFgOAAAAZGlzdF9jb2xvcl9SR0JxBChL3EvcS9xL/3RxBVgTAAAAc2F2
+ZWRXaWRnZXRHZW9tZXRyeXEGQzIB2dDLAAIAAP////j////4AAAGRwAAA2MAAAGQAAAAtAAABK8A
+AAKnAAAAAAIAAAAGQHEHWAsAAABzZWxlY3Rfcm93c3EIiFgNAAAAc2VsZWN0ZWRfY29sc3EJXXEK
+KEsASwFLAksDSwRLBWVYDQAAAHNlbGVjdGVkX3Jvd3NxC11xDChLO0s8Sz1LPks/S0BLQUtCS0NL
+RGVYFQAAAHNob3dfYXR0cmlidXRlX2xhYmVsc3ENiFgSAAAAc2hvd19kaXN0cmlidXRpb25zcQ6J
+WAsAAABfX3ZlcnNpb25fX3EPSwFYEAAAAGNvbnRleHRfc2V0dGluZ3NxEF1xEShjb3Jhbmdld2lk
+Z2V0LnNldHRpbmdzCkNvbnRleHQKcRIpgXETfXEUKFgEAAAAdGltZXEVR0HXs8RuBw8zWAYAAAB2
+YWx1ZXNxFn1xF2gPSwFzWAoAAABhdHRyaWJ1dGVzcRh9cRkoWAQAAABESlhIcRpLAlgHAAAASkRY
+Wl9ETXEbSwJYAwAAAGxuZ3EcSwJYAwAAAGxhdHEdSwJ1WAUAAABtZXRhc3EefXEfKFgFAAAATlNS
+TUNxIEsDWAQAAABaQ0RacSFLA3V1YmgSKYFxIn1xIyhoFUdB17PEbgcPM2gWfXEkaA9LAXNoGH1x
+JShYBAAAAERKWEhxJksCWAcAAABKRFhaX0RNcSdLAlgDAAAAbG5ncShLAlgDAAAAbGF0cSlLAnVo
+Hn1xKihYBQAAAE5TUk1DcStLA1gEAAAAWkNEWnEsSwN1dWJoEimBcS19cS4oaBVHQdezhAVLIdBo
+Fn1xL2gPSwFzaBh9cTAoWAQAAABESlhIcTFLAlgHAAAASkRYWl9ETXEySwJYAwAAAGxuZ3EzSwJY
+AwAAAGxhdHE0SwJ1aB59cTUoWAUAAABOU1JNQ3E2SwNYBAAAAFpDRFpxN0sDdXViaBIpgXE4fXE5
+KGgVR0HXs4Nieg6taBZ9cTpoD0sBc2gYfXE7KFgDAAAAX2lkcTxLAlgEAAAAeHpkbXE9SwJYBgAA
+AGFkY29kZXE+SwJYCAAAAGNpdHljb2RlcT9LAlgDAAAAbG5ncUBLAlgDAAAAbGF0cUFLAlgHAAAA
+SkRYWl9ETXFCSwJYAgAAAERXcUNLAlgCAAAAR1RxREsCdWgefXFFKFgEAAAAbmFtZXFGSwNYBgAA
+AGNvdW50eXFHSwNYBAAAAGNpdHlxSEsDWAYAAABKRFhaTUNxSUsDdXViZXUu
+</properties>
+		<properties format="pickle" node_id="2">gAN9cQAoWAsAAABhdXRvX2NvbW1pdHEBiFgSAAAAY29udHJvbEFyZWFWaXNpYmxlcQKIWBMAAABz
+YXZlZFdpZGdldEdlb21ldHJ5cQNDMgHZ0MsAAgAA////+P////gAAAZHAAADYwAAAA8AAAAmAAAG
+PgAAA1oAAAAAAgAAAAZAcQRYCQAAAHNlbGVjdGlvbnEFXXEGSwJjbnVtcHkuY29yZS5tdWx0aWFy
+cmF5CnNjYWxhcgpxB2NudW1weQpkdHlwZQpxCFgCAAAAdTFxCUsASwGHcQpScQsoSwNYAQAAAHxx
+DE5OTkr/////Sv////9LAHRxDWJDAQFxDoZxD1JxEIZxEWFYBQAAAGdyYXBocRJ9cRMoWAsAAABh
+bHBoYV92YWx1ZXEUS4BYDQAAAGNsYXNzX2RlbnNpdHlxFYlYBgAAAGZyZWV6ZXEWiVgLAAAAaml0
+dGVyX3NpemVxF0sAWBMAAABsYWJlbF9vbmx5X3NlbGVjdGVkcRiJWAsAAABwb2ludF93aWR0aHEZ
+SwpYCQAAAHNob3dfZ3JpZHEaiVgLAAAAc2hvd19sZWdlbmRxG4hYEQAAAHRpbGVfcHJvdmlkZXJf
+a2V5cRxYDgAAAEdhb2RlU3RyZWV0TWFwcR11WAsAAABfX3ZlcnNpb25fX3EeSwNYEAAAAGNvbnRl
+eHRfc2V0dGluZ3NxH11xIChjb3Jhbmdld2lkZ2V0LnNldHRpbmdzCkNvbnRleHQKcSEpgXEifXEj
+KFgEAAAAdGltZXEkR0HXs8WmIhyMWAYAAAB2YWx1ZXNxJX1xJihYCgAAAGF0dHJfY29sb3JxJ05K
+/v///4ZxKFgKAAAAYXR0cl9sYWJlbHEpWAQAAABaQ0RacSpLZ4ZxK1gIAAAAYXR0cl9sYXRxLFgD
+AAAAbGF0cS1LZoZxLlgIAAAAYXR0cl9sb25xL1gDAAAAbG5ncTBLZoZxMVgKAAAAYXR0cl9zaGFw
+ZXEyTkr+////hnEzWAkAAABhdHRyX3NpemVxNE5K/v///4ZxNWgSfXE2aB5LA3VYCgAAAGF0dHJp
+YnV0ZXNxN31xOChYBAAAAERKWEhxOUsCWAcAAABKRFhaX0RNcTpLAmgwSwJoLUsCWAgAAABTZWxl
+Y3RlZHE7SwF1WAUAAABtZXRhc3E8fXE9KFgFAAAATlNSTUNxPksDaCpLA3V1YmghKYFxP31xQCho
+JEdB17PFpiIMJGglfXFBKGgnTkr+////hnFCaCloKktnhnFDaCxoLUtmhnFEaC9oMEtmhnFFaDJO
+Sv7///+GcUZoNE5K/v///4ZxR2gSfXFIaB5LA3VoN31xSShoOUsCaDpLAmgwSwJoLUsCaDtLAXVo
+PH1xSihoPksDaCpLA3V1YmghKYFxS31xTChoJEdB17PEmlWO7WglfXFNKGgnTkr+////hnFOaClo
+KktnhnFPaCxoLUtmhnFQaC9oMEtmhnFRaDJOSv7///+GcVJoNE5K/v///4ZxU2gSfXFUaB5LA3Vo
+N31xVShoOUsCaDpLAmgwSwJoLUsCdWg8fXFWKGg+SwNoKksDdXViaCEpgXFXfXFYKGgkR0HXs8Ru
+CY6gaCV9cVkoWAoAAABhdHRyX2NvbG9ycVpOSv7///+GcVtYCgAAAGF0dHJfbGFiZWxxXFgEAAAA
+WkNEWnFdS2eGcV5YCAAAAGF0dHJfbGF0cV9YAwAAAGxhdHFgS2aGcWFYCAAAAGF0dHJfbG9ucWJY
+AwAAAGxuZ3FjS2aGcWRYCgAAAGF0dHJfc2hhcGVxZU5K/v///4ZxZlgJAAAAYXR0cl9zaXplcWdO
+Sv7///+GcWhYBQAAAGdyYXBocWl9cWpoHksDdWg3fXFrKFgEAAAAREpYSHFsSwJYBwAAAEpEWFpf
+RE1xbUsCaGNLAmhgSwJ1aDx9cW4oWAUAAABOU1JNQ3FvSwNoXUsDdXViaCEpgXFwfXFxKGgkR0HX
+s4QFUqAAaCV9cXIoWAoAAABhdHRyX2NvbG9ycXNOSv7///+GcXRYCgAAAGF0dHJfbGFiZWxxdVgE
+AAAAWkNEWnF2S2eGcXdYCAAAAGF0dHJfbGF0cXhYAwAAAGxhdHF5S2aGcXpYCAAAAGF0dHJfbG9u
+cXtYAwAAAGxuZ3F8S2aGcX1YCgAAAGF0dHJfc2hhcGVxfk5K/v///4Zxf1gJAAAAYXR0cl9zaXpl
+cYBOSv7///+GcYFYBQAAAGdyYXBocYJ9cYNoHksDdWg3fXGEKFgEAAAAREpYSHGFSwJYBwAAAEpE
+WFpfRE1xhksCaHxLAmh5SwJ1aDx9cYcoWAUAAABOU1JNQ3GISwNodksDdXViaCEpgXGJfXGKKGgk
+R0HXs4Nsj8yraCV9cYsoaHNOSv7///+GcYxodU5K/v///4ZxjWh4aHlLZoZxjmh7aHxLZoZxj2h+
+Tkr+////hnGQaIBOSv7///+GcZFogn1xkmgeSwN1aDd9cZMoaIVLAmiGSwJofEsCaHlLAnVoPH1x
+lChoiEsDaHZLA3V1YmghKYFxlX1xlihoJEdB17ODa94hMGglfXGXKGhzTkr+////hnGYaHVOSv7/
+//+GcZloeGh5S2aGcZpoe2h8S2aGcZtofk5K/v///4ZxnGiATkr+////hnGdaIJ9cZ5oHksDdWg3
+fXGfKGiFSwJohksCaHxLAmh5SwJ1aDx9caAoaIhLA2h2SwN1dWJoISmBcaF9caIoaCRHQdezg2s8
+ooloJX1xoyhoc05K/v///4ZxpGh1Tkr+////hnGlaHhoeUtmhnGmaHtofEtmhnGnaH5OSv7///+G
+cahogE5K/v///4ZxqWiCfXGqaB5LA3VoN31xqyhohUsCaIZLAmh8SwJoeUsCdWg8fXGsKGiISwNo
+dksDdXViZXUu
+</properties>
+		<properties format="pickle" node_id="3">gAN9cQAoWAsAAABhdXRvX2NvbW1pdHEBiFgOAAAAY29sb3JfYnlfY2xhc3NxAohYEgAAAGNvbnRy
+b2xBcmVhVmlzaWJsZXEDiFgOAAAAZGlzdF9jb2xvcl9SR0JxBChL3EvcS9xL/3RxBVgTAAAAc2F2
+ZWRXaWRnZXRHZW9tZXRyeXEGQzIB2dDLAAIAAP////j////4AAAGRwAAA2MAAAGQAAAAtAAABK8A
+AAKnAAAAAAIAAAAGQHEHWAsAAABzZWxlY3Rfcm93c3EIiFgNAAAAc2VsZWN0ZWRfY29sc3EJXXEK
+WA0AAABzZWxlY3RlZF9yb3dzcQtdcQxYFQAAAHNob3dfYXR0cmlidXRlX2xhYmVsc3ENiFgSAAAA
+c2hvd19kaXN0cmlidXRpb25zcQ6JWAsAAABfX3ZlcnNpb25fX3EPSwFYEAAAAGNvbnRleHRfc2V0
+dGluZ3NxEF1xEShjb3Jhbmdld2lkZ2V0LnNldHRpbmdzCkNvbnRleHQKcRIpgXETfXEUKFgEAAAA
+dGltZXEVR0HXs8WmE+jWWAYAAAB2YWx1ZXNxFn1xF2gPSwFzWAoAAABhdHRyaWJ1dGVzcRh9cRko
+WAQAAABESlhIcRpLAlgHAAAASkRYWl9ETXEbSwJYAwAAAGxuZ3EcSwJYAwAAAGxhdHEdSwJ1WAUA
+AABtZXRhc3EefXEfKFgFAAAATlNSTUNxIEsDWAQAAABaQ0RacSFLA3V1YmgSKYFxIn1xIyhoFUdB
+17PFphPYcGgWfXEkaA9LAXNoGH1xJShoGksCaBtLAmgcSwJoHUsCdWgefXEmKGggSwNoIUsDdXVi
+ZXUu
+</properties>
+		<properties format="literal" node_id="4">{'controlAreaVisible': True, 'currentScriptIndex': 2, 'savedWidgetGeometry': b'\x01\xd9\xd0\xcb\x00\x02\x00\x00\x00\x00\x01\x88\x00\x00\x00c\x00\x00\x04\xb7\x00\x00\x02\xe1\x00\x00\x01\x90\x00\x00\x00\x82\x00\x00\x04\xaf\x00\x00\x02\xd9\x00\x00\x00\x00\x00\x00\x00\x00\x06@', 'scriptLibrary': [{'name': 'coord-convert', 'script': 'from coord_convert.transform import wgs2gcj \nfrom Orange.data.pandas_compat import table_from_frame, table_to_frame\ndata = table_to_frame(in_data)\ngcj_lon = []; gcj_lat = []\nfor i in range(data.shape[0]):\n    lon, lat = wgs2gcj(data["Longitude"][i], data["Latitude"][i])\n    gcj_lon.append(lon); gcj_lat.append(lat)\ndata["gcj_lat"] = gcj_lat; data["gcj_lon"] =  gcj_lon\nout_data = table_from_frame(data)\n', 'filename': None}, {'name': 'test', 'script': 'import numpy as np\nimport Orange\n\nnormalized = in_data.X / in_data[:, "Total Population (millions) 2015"].metas\n\nout_data = Orange.data.Table.from_numpy(\n    in_data.domain,\n    normalized, in_data.Y, in_data.metas)', 'filename': None}, {'name': 'TianDiTuMarker', 'script': 'from orangecontrib.geo.TianDiTu import dfTDGeoCode,TDshowMarker\nfrom Orange.data.pandas_compat import table_from_frame, table_to_frame\n# 天地图的key\napplication_key = "your key of www.tianditu.gov.cn"\n# zoom =11 刚好可以看到本市全境\nzoom = 11\n# 中间html文件，要生成一个中间的html文件以调用天地图的JavaScript API\nhtmlfile = "D:/JetBrains/IdeaProjects/MyPyhton38/scripts/tianditu.html" \n# Data Tabel转换为 DataFrame，把字符字段也带上\ndata = table_to_frame(in_data,include_metas=True)\n# 调用TDshowMarker函数要有"name"与"address"两个字段，与 "lng"、"lat"两个坐标字段\ndata.rename(columns={"NSRMC":"name","ZCDZ":"address"},inplace=True)\n# 调用天地图的JavaScript API，并在地图上标记输入的地址\nTDshowMarker(data,zoom,htmlfile,application_key,False)\n', 'filename': None}], 'scriptText': 'from orangecontrib.geo.TianDiTu import dfTDGeoCode,TDshowMarker\nfrom Orange.data.pandas_compat import table_from_frame, table_to_frame\n# 天地图的key\napplication_key = "your key of www.tianditu.gov.cn"\n# zoom =11 刚好可以看到本市全境\nzoom = 11\n# 中间html文件，要生成一个中间的html文件以调用天地图的JavaScript API\nhtmlfile = "D:/JetBrains/IdeaProjects/MyPyhton38/scripts/tianditu.html" \n# Data Tabel转换为 DataFrame，把字符字段也带上\ndata = table_to_frame(in_data,include_metas=True)\n# 调用TDshowMarker函数要有"name"与"address"两个字段，与 "lng"、"lat"两个坐标字段\ndata.rename(columns={"NSRMC":"name","ZCDZ":"address"},inplace=True)\n# 调用天地图的JavaScript API，并在地图上标记输入的地址\nTDshowMarker(data,zoom,htmlfile,application_key,False)\n', 'splitterState': b'\x00\x00\x00\xff\x00\x00\x00\x01\x00\x00\x00\x02\x00\x00\x00c\x00\x00\x00c\x01\xff\xff\xff\xff\x01\x00\x00\x00\x02\x00', '__version__': 2}</properties>
+		<properties format="pickle" node_id="5">gAN9cQAoWAsAAABhdXRvX2NvbW1pdHEBiFgSAAAAY29udHJvbEFyZWFWaXNpYmxlcQKIWBMAAABz
+YXZlZFdpZGdldEdlb21ldHJ5cQNDMgHZ0MsAAgAAAAACaQAAAHIAAATQAAAC8AAAAnEAAACRAAAE
+yAAAAugAAAAAAAAAAAZAcQRYEgAAAHVzZV9pbnB1dF9mZWF0dXJlc3EFiVgLAAAAX192ZXJzaW9u
+X19xBksBWBAAAABjb250ZXh0X3NldHRpbmdzcQddcQhjb3Jhbmdld2lkZ2V0LnNldHRpbmdzCkNv
+bnRleHQKcQkpgXEKfXELKFgEAAAAdGltZXEMR0HXs8XPdr1lWAYAAAB2YWx1ZXNxDX1xDihYEQAA
+AGRvbWFpbl9yb2xlX2hpbnRzcQ99cRAoWAMAAABsYXRxEUsChnESWAkAAABhdmFpbGFibGVxE0sA
+hnEUWAMAAABsbmdxFUsChnEWaBNLAYZxF1gEAAAAREpYSHEYSwKGcRlYCQAAAGF0dHJpYnV0ZXEa
+SwCGcRtYBwAAAEpEWFpfRE1xHEsChnEdaBpLAYZxHlgIAAAAU2VsZWN0ZWRxH0sBhnEgWAUAAABj
+bGFzc3EhSwCGcSJYBQAAAE5TUk1DcSNLA4ZxJFgEAAAAbWV0YXElSwCGcSZYBAAAAFpDRFpxJ0sD
+hnEoaCVLAYZxKXVK/v///4ZxKmgGSwF1WAoAAABhdHRyaWJ1dGVzcSt9cSwoaBhLAmgcSwJoFUsC
+aBFLAmgfSwF1WAUAAABtZXRhc3EtfXEuKGgjSwNoJ0sDdXViYXUu
+</properties>
+		<properties format="literal" node_id="6">{'controlAreaVisible': True, 'currentScriptIndex': 1, 'savedWidgetGeometry': b'\x01\xd9\xd0\xcb\x00\x02\x00\x00\x00\x00\x01\x88\x00\x00\x00c\x00\x00\x04\xb7\x00\x00\x02\xe1\x00\x00\x01\x90\x00\x00\x00\x82\x00\x00\x04\xaf\x00\x00\x02\xd9\x00\x00\x00\x00\x00\x00\x00\x00\x06@', 'scriptLibrary': [{'name': 'coord-convert', 'script': 'from coord_convert.transform import wgs2gcj \nfrom Orange.data.pandas_compat import table_from_frame, table_to_frame\ndata = table_to_frame(in_data)\ngcj_lon = []; gcj_lat = []\nfor i in range(data.shape[0]):\n    lon, lat = wgs2gcj(data["Longitude"][i], data["Latitude"][i])\n    gcj_lon.append(lon); gcj_lat.append(lat)\ndata["gcj_lat"] = gcj_lat; data["gcj_lon"] =  gcj_lon\nout_data = table_from_frame(data)\n', 'filename': None}, {'name': 'TianDiTuGeoCode', 'script': 'from orangecontrib.geo.TianDiTu import dfTDGeoCode,TDshowMarker\nfrom Orange.data.pandas_compat import table_from_frame, table_to_frame\n# 天地图的key\napplication_key = "7d5cb12a05d8a8f5803ade71a590c91f"\n# Data Tabel转换为 DataFrame，把字符字段也带上\ndata = table_to_frame(in_data,include_metas=True)\ndata.rename(columns={"NSRMC":"name","ZCDZ":"address"},inplace=True)\ndata2 = dfTDGeoCode(data,application_key)\nout_data = table_from_frame(data2)\n', 'filename': None}], 'scriptText': 'from orangecontrib.geo.TianDiTu import dfTDGeoCode,TDshowMarker\nfrom Orange.data.pandas_compat import table_from_frame, table_to_frame\n# 天地图的key\napplication_key = "7d5cb12a05d8a8f5803ade71a590c91f"\n# Data Tabel转换为 DataFrame，把字符字段也带上\ndata = table_to_frame(in_data,include_metas=True)\ndata.rename(columns={"NSRMC":"name","ZCDZ":"address"},inplace=True)\ndata2 = dfTDGeoCode(data,application_key)\nout_data = table_from_frame(data2)\n', 'splitterState': b'\x00\x00\x00\xff\x00\x00\x00\x01\x00\x00\x00\x02\x00\x00\x00c\x00\x00\x00c\x01\xff\xff\xff\xff\x01\x00\x00\x00\x02\x00', '__version__': 2}</properties>
+		<properties format="pickle" node_id="7">gAN9cQAoWAsAAABhdXRvX2NvbW1pdHEBiFgSAAAAY29udHJvbEFyZWFWaXNpYmxlcQKIWBMAAABz
+YXZlZFdpZGdldEdlb21ldHJ5cQNDMgHZ0MsAAgAA////+P////gAAAZHAAADYwAAAA8AAAAmAAAG
+PgAAA1oAAAAAAgAAAAZAcQRYCQAAAHNlbGVjdGlvbnEFTlgFAAAAZ3JhcGhxBn1xByhYCwAAAGFs
+cGhhX3ZhbHVlcQhLgFgNAAAAY2xhc3NfZGVuc2l0eXEJiVgGAAAAZnJlZXplcQqJWAsAAABqaXR0
+ZXJfc2l6ZXELSwBYEwAAAGxhYmVsX29ubHlfc2VsZWN0ZWRxDIlYCwAAAHBvaW50X3dpZHRocQ1L
+ClgJAAAAc2hvd19ncmlkcQ6JWAsAAABzaG93X2xlZ2VuZHEPiFgRAAAAdGlsZV9wcm92aWRlcl9r
+ZXlxEFgPAAAAdGlhbmRpdHUgbWFya2VycRF1WAsAAABfX3ZlcnNpb25fX3ESSwNYEAAAAGNvbnRl
+eHRfc2V0dGluZ3NxE11xFChjb3Jhbmdld2lkZ2V0LnNldHRpbmdzCkNvbnRleHQKcRUpgXEWfXEX
+KFgEAAAAdGltZXEYR0HXs8edpgtlWAYAAAB2YWx1ZXNxGX1xGihYCgAAAGF0dHJfY29sb3JxG05K
+/v///4ZxHFgKAAAAYXR0cl9sYWJlbHEdTkr+////hnEeWAgAAABhdHRyX2xhdHEfWAMAAABsYXRx
+IEtmhnEhWAgAAABhdHRyX2xvbnEiWAMAAABsbmdxI0tmhnEkWAoAAABhdHRyX3NoYXBlcSVOSv7/
+//+GcSZYCQAAAGF0dHJfc2l6ZXEnTkr+////hnEoaAZ9cSloEksDdVgKAAAAYXR0cmlidXRlc3Eq
+fXErKFgEAAAAREpYSHEsSwJYBwAAAEpEWFpfRE1xLUsCWAgAAABTZWxlY3RlZHEuSwFoI0sCaCBL
+AlgMAAAAU2VsZWN0ZWQgKDEpcS9LAXVYBQAAAG1ldGFzcTB9cTEoWAQAAABuYW1lcTJLA1gHAAAA
+YWRkcmVzc3EzSwN1dWJoFSmBcTR9cTUoaBhHQdezx52l+wJoGX1xNihoG05K/v///4ZxN2gdTkr+
+////hnE4aB9oIEtmhnE5aCJoI0tmhnE6aCVOSv7///+GcTtoJ05K/v///4ZxPGgGfXE9aBJLA3Vo
+Kn1xPihoLEsCaC1LAmguSwFoI0sCaCBLAnVoMH1xPyhoMksDaDNLA3V1YmV1Lg==
+</properties>
+		<properties format="pickle" node_id="8">gAN9cQAoWAsAAABhZG1pbl9sZXZlbHEBSwRYCwAAAGF1dG9fY29tbWl0cQKIWA0AAABiaW5uaW5n
+X2luZGV4cQNLAFgSAAAAY29udHJvbEFyZWFWaXNpYmxlcQSIWBMAAABzYXZlZFdpZGdldEdlb21l
+dHJ5cQVDMgHZ0MsAAgAA////+P////gAAAZHAAADYwAAAgYAAADqAAAGLwAAA0EAAAAAAgAAAAZA
+cQZYCQAAAHNlbGVjdGlvbnEHXXEISwRjbnVtcHkuY29yZS5tdWx0aWFycmF5CnNjYWxhcgpxCWNu
+dW1weQpkdHlwZQpxClgCAAAAdTFxC0sASwGHcQxScQ0oSwNYAQAAAHxxDk5OTkr/////Sv////9L
+AHRxD2JDAQFxEIZxEVJxEoZxE2FYBQAAAGdyYXBocRR9cRUoWAsAAABhbHBoYV92YWx1ZXEWS31Y
+CwAAAHNob3dfbGVnZW5kcReIWBEAAAB0aWxlX3Byb3ZpZGVyX2tleXEYWA8AAAB0aWFuZGl0dSB2
+ZWN0b3JxGXVYCwAAAF9fdmVyc2lvbl9fcRpLAlgQAAAAY29udGV4dF9zZXR0aW5nc3EbXXEcY29y
+YW5nZXdpZGdldC5zZXR0aW5ncwpDb250ZXh0CnEdKYFxHn1xHyhYBAAAAHRpbWVxIEdB17PHReXt
+gFgGAAAAdmFsdWVzcSF9cSIoWAgAAABhZ2dfYXR0cnEjWAQAAABESlhIcSRLZoZxJVgIAAAAYWdn
+X2Z1bmNxJlgFAAAAQ291bnRxJ0r+////hnEoWAgAAABhdHRyX2xhdHEpWAMAAABsYXRxKktmhnEr
+WAgAAABhdHRyX2xvbnEsWAMAAABsbmdxLUtmhnEuaBR9cS9oGksCdVgKAAAAYXR0cmlidXRlc3Ew
+fXExKGgkSwJYBwAAAEpEWFpfRE1xMksCaC1LAmgqSwJYCAAAAFNlbGVjdGVkcTNLAXVYBQAAAG1l
+dGFzcTR9cTUoWAUAAABOU1JNQ3E2SwNYBAAAAFpDRFpxN0sDdXViYXUu
+</properties>
+		<properties format="pickle" node_id="9">gAN9cQAoWAsAAABhdXRvX2NvbW1pdHEBiFgOAAAAY29sb3JfYnlfY2xhc3NxAohYEgAAAGNvbnRy
+b2xBcmVhVmlzaWJsZXEDiFgOAAAAZGlzdF9jb2xvcl9SR0JxBChL3EvcS9xL/3RxBVgTAAAAc2F2
+ZWRXaWRnZXRHZW9tZXRyeXEGQzIB2dDLAAIAAAAAAYgAAACVAAAEtwAAAq8AAAGQAAAAtAAABK8A
+AAKnAAAAAAAAAAAGQHEHWAsAAABzZWxlY3Rfcm93c3EIiFgNAAAAc2VsZWN0ZWRfY29sc3EJXXEK
+WA0AAABzZWxlY3RlZF9yb3dzcQtdcQxYFQAAAHNob3dfYXR0cmlidXRlX2xhYmVsc3ENiFgSAAAA
+c2hvd19kaXN0cmlidXRpb25zcQ6JWAsAAABfX3ZlcnNpb25fX3EPSwFYEAAAAGNvbnRleHRfc2V0
+dGluZ3NxEF1xEWNvcmFuZ2V3aWRnZXQuc2V0dGluZ3MKQ29udGV4dApxEimBcRN9cRQoWAQAAAB0
+aW1lcRVHQdezx5eTThRYBgAAAHZhbHVlc3EWfXEXaA9LAXNYCgAAAGF0dHJpYnV0ZXNxGH1xGShY
+BAAAAERKWEhxGksCWAcAAABKRFhaX0RNcRtLAlgIAAAAU2VsZWN0ZWRxHGNPcmFuZ2UuZGF0YS52
+YXJpYWJsZQpUdXBsZUxpc3QKcR1YAgAAAE5vcR5YAwAAAFllc3EfhnEghXEhgXEiWAMAAABsbmdx
+I0sCWAMAAABsYXRxJEsCdVgFAAAAbWV0YXNxJX1xJihYBAAAAG5hbWVxJ0sDWAcAAABhZGRyZXNz
+cShLA3V1YmF1Lg==
+</properties>
+	</node_properties>
+	<session_state>
+		<window_groups />
+	</session_state>
+</scheme>
