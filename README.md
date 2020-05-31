@@ -173,3 +173,8 @@ May, 28th, 2020
 
 Add an example of using geocode and tile maps from www.tianditu.gov.cn, functions called are in ./geo/TianDiTu.py
 , and usage is at ./geo/example/AddressShuiWu.py, workfolw file of Orange is ./geo/example/ZhuHaiShuiWuAddress.ows.
+
+May,31th,2020
+
+Merge vector map and vector markers of tianditu.gov.cn, modify related sources in ./contextily/tile.py,
+./geo/widgets/plotutils.py, ./geo/example/ZhuHaiShuiWu.py, details are mentioned in ./geo/Modification_to_orange_geo.txt.
