@@ -24,6 +24,10 @@ from Orange.widgets.utils.plot import ZOOMING
 from Orange.widgets.visualize.owscatterplotgraph import LegendItem
 from Orange.widgets.visualize.utils.plotutils import InteractiveViewBox
 
+#Added by Jean 2020/05/30
+from contextily.tile import _fetch_tile
+# key of www.tianditu.gov.cn
+TDKEY = "your key of tianditu.gov.cn"
 
 MAX_LATITUDE = 85.0511287798
 MAX_LONGITUDE = 180
@@ -71,39 +75,51 @@ _TileProvider = NamedTuple(
 
 
 TILE_PROVIDERS = {
-    "OpenStreetMap": _TileProvider(
-        url="http://tile.openstreetmap.org/{z}/{x}/{y}.png",
-        attribution='&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>',
-        size=256,
-        max_zoom=18
-    ),
     # Added by Jean 2020/05/21
     "tianditu vector": _TileProvider(
-        url="https://t6.tianditu.gov.cn/vec_w/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=vec&STYLE=default&TILEMATRIXSET=w&FORMAT=tiles&TILECOL={x}&TILEROW={y}&TILEMATRIX={z}&tk=your_key",
+        url="https://t6.tianditu.gov.cn/DataServer?T=vec_w&x={x}&y={y}&l={z}&tk=" + TDKEY,
         attribution='&copy; <a href="https://www.tianditu.gov.cn/">tianditu.gov.cn</a>',
         size=256,
         max_zoom=18
     ),
     "tianditu satellite": _TileProvider(
-        url="https://t6.tianditu.gov.cn/img_w/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=img&STYLE=default&TILEMATRIXSET=w&FORMAT=tiles&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}&tk=your_key",
+        url="https://t6.tianditu.gov.cn/DataServer?T=img_w&x={x}&y={y}&l={z}&tk=" + TDKEY,
+        attribution='&copy; <a href="https://www.tianditu.gov.cn/">tianditu.gov.cn</a>',
+        size=256,
+        max_zoom=18
+    ),     
+    "tianditu terrain": _TileProvider(
+        url="https://t6.tianditu.gov.cn/DataServer?T=ter_w&x={x}&y={y}&l={z}&tk=" + TDKEY,
         attribution='&copy; <a href="https://www.tianditu.gov.cn/">tianditu.gov.cn</a>',
         size=256,
         max_zoom=18
     ),       
     # Added by Jean 2020/04/25
-    "GaodeStreetMap": _TileProvider(
+    "Gaode StreetMap": _TileProvider(
         url="http://wprd01.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=7&x={x}&y={y}&z={z}",        
         attribution='&copy; <a href="http://map.amap.com/doc/serviceitem.html">高德地图</a>',
         size=256,
         max_zoom=18
     ), 
+    "Gaode Satellite": _TileProvider(
+        url="http://wprd01.is.autonavi.com/appmaptile?style=8&x={x}&y={y}&z={z}",        
+        attribution='&copy; <a href="http://map.amap.com/doc/serviceitem.html">高德地图</a>',
+        size=256,
+        max_zoom=19
+    ),    
     # Added by Jean 2020/05/08
     "ArcGIS": _TileProvider(
         url="https://map.geoq.cn/arcgis/rest/services/ChinaOnlineCommunityENG/MapServer/tile/{z}/{y}/{x}",        
         attribution='&copy; <a href="https://map.geoq.cn/arcgis/rest/services">ChinaOnlineCommunity</a>',
         size=256,
         max_zoom=18
-    ),           
+    ),   
+    "OpenStreetMap": _TileProvider(
+        url="http://tile.openstreetmap.org/{z}/{x}/{y}.png",
+        attribution='&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>',
+        size=256,
+        max_zoom=18
+    ),        
     "Black and white": _TileProvider(
         url="http://tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png",
         attribution='&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>',
@@ -119,13 +135,6 @@ TILE_PROVIDERS = {
     "Satellite": _TileProvider(
         url="http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
         attribution="Sources: Esri, DigitalGlobe, GeoEye, Earthstar Geographics, CNES/Airbus DS, USDA, USGS, AeroGRID, IGN, and the GIS User Community",
-        size=256,
-        max_zoom=19
-    ),
-    # Added by Jean 2020/04/25    
-    "GaodeSatellite": _TileProvider(
-        url="http://wprd01.is.autonavi.com/appmaptile?style=8&x={x}&y={y}&z={z}",        
-        attribution='&copy; <a href="http://map.amap.com/doc/serviceitem.html">高德地图</a>',
         size=256,
         max_zoom=19
     ),        
@@ -593,7 +602,35 @@ class MapMixin:
                 # retry to download image
                 self._load_one_from_net(_tile)
             else:
-                img = _future.result()
+                img = _future.result()                
+                # Added by Jean 2020/05/30 for support of tianditu.gov.cn
+                # Download tianditu.gov.cn text marker for the same tile and merge it to the map tile
+# from contextily.tile import _fetch_tile                
+#   def _load_one_from_net(self, t: _TileItem):
+#       def set_tile(_future):
+#       ......
+                if "tianditu" in _tile.url:
+                    url = _tile.url
+                    print(url)
+                    getMarker = False
+                    if "vec_w" in url:
+                        url = url.replace("vec_w","cva_w") 
+                        getMarker = True
+                    elif "img_w" in url:
+                        url = url.replace("img_w","cia_w")
+                        getMarker = True
+                    elif "ter_w" in url:
+                        url = url.replace("ter_w","cta_w")
+                        getMarker = True
+                    if getMarker:
+                        # Dowload the corresponding marker tile 
+                        image = Image.fromarray( _fetch_tile(url, 0, 3), 'RGBA')
+                        # Merge the marker tile to the corresponding map tile
+                        r, g, b, alpha = image.split()
+                        img = img.convert("RGBA")
+                        img = Image.composite(image, img, alpha)
+                        print(url)
+                                        
                 if not _tile.disc_cache:
                     self.show_internet_error.emit(False)
                 self.mem_cache[_tile] = img
