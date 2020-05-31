@@ -161,3 +161,18 @@ def latlon2region(latlon, admin=0):
 ......
     # Modified by Jean 2020/05/13
     assert 0 <= admin <= 4
+
+4.D:\Anaconda3\Lib\site-packages\contextily\tile.py
+# Modified by Jean 2020/05/26
+#USER_AGENT = "contextily-" + uuid.uuid4().hex
+USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:76.0) Gecko/20100101 Firefox/76.0"
+
+def _fetch_tile(tile_url, wait, max_retries):
+    request = _retryer(tile_url, wait, max_retries)
+    with io.BytesIO(request.content) as image_stream:
+        # Modified by Jean 2020/05/29, convert to PNG with alpha channel for tianditu.gov.cn
+        # image = Image.open(image_stream).convert("RGB")        
+        image = Image.open(image_stream).convert("RGBA")
+        array = np.asarray(image)
+        image.close()
+    return array
