@@ -9,13 +9,14 @@ import pandas as pd
 import geopandas as gpd
 import matplotlib.pyplot as plt
 import contextily as ctx
+from contextily.tile import _calculate_zoom,_validate_zoom
 from shapely.geometry import Point,Polygon, MultiPolygon
 import requests
 import webbrowser
 from coord_convert.transform import wgs2gcj
 import math
 
-application_key = "your key of www.tianditu.gov.cn"
+application_key = "your key of tianditu.gov.cn"
 # 天地图
 def TDGeoCode(address):    
      url = 'http://api.tianditu.gov.cn/geocoder?ds={"keyWord":"'+address+'"}&tk='+application_key
@@ -42,7 +43,7 @@ def TDGeoCode(address):
         
 # 高德地图，解释各区分局地址为坐标，并在地图上标示
 def geocode(address):
-    parameters = {'address': address, 'key': 'your gaode key'}
+    parameters = {'address': address, 'key': 'your key of GaoDe map'}
     url = 'https://restapi.amap.com/v3/geocode/geo?parameters'
     response = requests.get(url, parameters)
     # answer = response.geocodes['location']
@@ -227,9 +228,11 @@ gdf5 = gdf3[gdf3.branch!="一分局"]
 # 高德瓦片地图网址，用作底图
 #url="http://wprd01.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=7&x={x}&y={y}&z={z}" 
 # 天地图瓦片地图网址
-url="https://t6.tianditu.gov.cn/vec_w/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=vec&"+\
-        "STYLE=default&TILEMATRIXSET=w&FORMAT=tiles&TILECOL={x}&TILEROW={y}&TILEMATRIX={z}&tk="+\
-        application_key
+# 天地图底图
+url = "https://t6.tianditu.gov.cn/DataServer?T=vec_w&x={x}&y={y}&l={z}&tk="+ application_key
+# 天地图中文注记      
+url2 = "https://t6.tianditu.gov.cn/DataServer?T=cva_w&x={x}&y={y}&l={z}&tk="+ application_key     
+        
 plt.rcParams['font.sans-serif'] = ['KaiTi'] # 指定默认字体
 plt.rcParams['axes.unicode_minus'] = False # 解决保存图像是负号'-'显示为方块的问题
 # 在地图上显示单位纳税人统计数据并标注
@@ -247,7 +250,33 @@ for idx, row in gdf3.iterrows():
     # 标注区分局机关坐标
     ax.scatter(row.lng_dz,row.lat_dz,marker="o",s=15,c="green")
     # 在区分局机关坐标旁标注编号，以便与上面的名称及数量对应
-    ax.text(row.lng_dz, row.lat_dz, s=str(row.fjNum), color="green",fontsize=10)   
-# 增加底图
+    ax.text(row.lng_dz, row.lat_dz, s=str(row.fjNum), color="green",fontsize=10)  
+# 天地图中文注记实现方式一  
+# 增加底图，已改成PNG格式，底图要放在最前面
 ctx.add_basemap(ax,source=url)
-plt.show()
+# 增加中文注记，已改成PNG格式，非注记部分是透明的，不会遮挡底图
+ctx.add_basemap(ax,source=url2)
+plt.show()   
+
+# 天地图中文注记实现方式二
+ # xmin, xmax, ymin, ymax = ax.axis()
+# from PIL import Image
+# img, bbox = ctx.bounds2img(xmin,ymin,xmax,ymax,source = url)
+# img2, bbox2 = ctx.bounds2img(xmin,ymin,xmax,ymax,source = url2)
+# img1 = Image.fromarray(img, 'RGBA')
+# ax.imshow(img1, extent=bbox)
+# ax.axis((xmin, xmax, ymin, ymax))
+# img3 = Image.fromarray(img2, 'RGBA')
+# ax.imshow(img3, extent=bbox2)
+# ax.axis((xmin, xmax, ymin, ymax))
+# plt.show()
+
+# 缩小地图范围，看看中文注记是否会清晰一点。
+gdf6 = gdf3[gdf3.branch=="万山"]
+ax = gdf6.plot(color="blue")
+# 增加底图，已改成PNG格式，底图要放在最前面
+ctx.add_basemap(ax,source=url)
+# 增加中文注记，已改成PNG格式，非注记部分是透明的，不会遮挡底图
+ctx.add_basemap(ax,source=url2)
+plt.show()   
+
