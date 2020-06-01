@@ -180,4 +180,5 @@ Merge vector map and vector markers of tianditu.gov.cn, modify related sources i
 ./geo/widgets/plotutils.py, ./geo/example/ZhuHaiShuiWu.py, details are mentioned in ./geo/Modification_to_orange_geo.txt.
 
 Jun, 1st, 2020
+
 Modify ./geo/mapper.py to force loading map shapes every time init() runs, to avoid null pointer exception.
