@@ -52,8 +52,12 @@ NUL = {}  # nonmapped (invalid) output region
 
 
 if is_shapely_speedups_available():
-    shapely.speedups.enable()
-    log.debug('Shapely speed-ups available')
+    # shapely.speedups.enable()
+    # log.debug('Shapely speed-ups available')
+    # Modified by Jean 2020/06/01, 
+    # forced loading shapes every time, encase of null pointer exception in init()
+    shapely.speedups.disable()    
+    log.debug('Shapely speed-ups disabled')    
 
 
 def wait_until_loaded(func):
@@ -107,7 +111,12 @@ def init():
 
         for feature in collection['features']:
             p = feature['properties']
-            shape = Shape(feature['geometry'])
+            # Modified by Jean 2020/06/01 to catch Null pointer exception
+            try:
+                shape = Shape(feature['geometry'])
+            except ValueError:
+                print(p)
+                continue
             tup = (shape, p)
 
             # Add representative lat-lon pair if non-existent
