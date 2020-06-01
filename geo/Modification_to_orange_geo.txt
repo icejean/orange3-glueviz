@@ -140,6 +140,14 @@ class OWChoropleth(OWWidget):
                                createLabel=False, callback=self.setup_plot)
 
 3.D:\Anaconda3\Lib\site-packages\orangecontrib\geo\mapper.py
+if is_shapely_speedups_available():
+    # shapely.speedups.enable()
+    # log.debug('Shapely speed-ups available')
+    # Modified by Jean 2020/06/01, 
+    # forced loading shapes every time, encase of null pointer exception in init()
+    shapely.speedups.disable()    
+    log.debug('Shapely speed-ups disabled')    
+
 def init():
 ......
     # Modified by Jean 2020/05/13, add level 4
@@ -155,6 +163,16 @@ def init():
                 shapes[4].extend(tups)
                 nearest_points[4].extend(points)
 ......
+        for feature in collection['features']:
+            p = feature['properties']
+            # Modified by Jean 2020/06/01 to catch Null pointer exception
+            try:
+                shape = Shape(feature['geometry'])
+            except ValueError:
+                print(p)
+                continue
+            tup = (shape, p)
+......            
 
 
 def latlon2region(latlon, admin=0):
