@@ -114,8 +114,9 @@ def init():
             # Modified by Jean 2020/06/01 to catch Null pointer exception
             try:
                 shape = Shape(feature['geometry'])
-            except ValueError:
+            except ValueError as e:
                 print(p)
+                print(e)
                 continue
             tup = (shape, p)
 
