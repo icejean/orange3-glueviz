@@ -8,7 +8,7 @@ from functools import reduce
 from AnyQt.QtCore import Qt, QObject, QSize, QRectF, pyqtSignal as Signal, \
     QPointF
 from AnyQt.QtGui import QPen, QBrush, QColor, QPolygonF, QPainter, QStaticText
-from AnyQt.QtWidgets import QApplication, QToolTip, QGraphicsTextItem, \
+from AnyQt.QtWidgets import QApplication, QToolTip, QGraphicsTextItem,\
     QGraphicsRectItem
 
 from shapely.geometry import Polygon, MultiPolygon
@@ -33,8 +33,11 @@ from Orange.widgets.utils.plot import OWPlotGUI
 from Orange.widgets.utils.sql import check_sql_input
 from Orange.widgets.utils.widgetpreview import WidgetPreview
 from Orange.widgets.utils.itemmodels import DomainModel
+
+# modified by Jean 2020/06/16 to reference other color palettes
 from Orange.widgets.utils.colorpalettes import BinnedContinuousPalette, \
-    DefaultContinuousPalette, LimitedDiscretePalette
+    DefaultContinuousPalette, LimitedDiscretePalette, ContinuousPalettes, DiscretePalettes
+
 from Orange.widgets.widget import Input, OWWidget, Msg, Output
 from Orange.widgets.visualize.owscatterplotgraph import LegendItem, \
     SymbolItemSample
@@ -587,9 +590,12 @@ class OWChoropleth(OWWidget):
     attr_lon = ContextSetting(None)
 
     agg_attr = ContextSetting(None)
+    
+    # Added by Jean 2020/06/16
+    palette_key = Setting(next(iter(ContinuousPalettes)))
+        
     agg_func = ContextSetting(DEFAULT_AGG_FUNC)
     admin_level = Setting(0)
-    #admin_level = 1
     binning_index = Setting(0)
 
     GRAPH_CLASS = OWChoroplethPlotMapGraph
@@ -689,6 +695,13 @@ class OWChoropleth(OWWidget):
         gui.checkBox(visualization_box, self, "graph.show_legend",
                      "Show legend",
                      callback=self.graph.update_legend_visibility)
+        
+        # Added by Jean 2020/06/16 for support of selecting color palette   
+        av_slider.setFixedWidth(176)
+        gui.comboBox(visualization_box, self, 'palette_key', label='Palette:',
+                     items=list(ContinuousPalettes.keys()),
+                     callback=self.update_palette, **options)
+        
 
         self.controlArea.layout().addStretch(100)
 
@@ -779,6 +792,13 @@ class OWChoropleth(OWWidget):
         else:
             self.agg_func = DEFAULT_AGG_FUNC
 
+        self.graph.update_colors()
+
+    # Added by Jean 2020/06/16 for support of selecting color palette
+    def update_palette(self):
+        # print(self.palette_key)
+        # print(ContinuousPalettes[self.palette_key])
+        self.agg_attr.palette = ContinuousPalettes[self.palette_key]
         self.graph.update_colors()
 
     def setup_plot(self):
@@ -1089,6 +1109,8 @@ class OWChoropleth(OWWidget):
 
 if __name__ == "__main__":
     # data = Table("India_census_district_population")
-    data = Table("D:/temp/COVID-19/covid-19-provs-CHN.tab")
-    #data = Table("D:/temp/COVID-19/stats-towns-GDDM.tab")    
+    # data = Table("D:/temp/COVID-19/covid-19-provs-CHN.tab")
+    # data = Table("D:/temp/COVID-19/stats-towns-GDDM.tab")  
+    data = Table("D:/temp/COVID-19/income-counties-CHN-GPS.tab")    
+
     WidgetPreview(OWChoropleth).run(data)

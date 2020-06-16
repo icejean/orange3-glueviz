@@ -182,3 +182,7 @@ Merge vector map and vector markers of tianditu.gov.cn, modify related sources i
 Jun, 1st, 2020
 
 Modify ./geo/mapper.py to force loading map shapes every time init() runs, to avoid null pointer exception.
+
+Jun, 16th, 2020
+
+Modify ./geo/widgets/owchoropleth.py to add support to selecting color palette in the widget.

@@ -106,12 +106,21 @@ from Orange.widgets.settings import Setting, SettingProvider, rename_setting, \
 from orangecontrib.geo.widgets.plotutils import MapMixin, MapViewBox, \
     _TileProvider, TILE_PROVIDERS, DEFAULT_TILE_PROVIDER, deg2norm
 
+# modified by Jean 2020/06/16 to reference other color palettes
+from Orange.widgets.utils.colorpalettes import BinnedContinuousPalette, \
+    DefaultContinuousPalette, LimitedDiscretePalette, ContinuousPalettes, DiscretePalettes
+
+
 class OWChoroplethPlotMapGraph(MapMixin, OWChoroplethPlotGraph):
     """
     This just adds maps as background.
     """
     # Added by Jean 2020/04/25 for support of selecting Tile provider        
     tile_provider_key = settings.Setting(DEFAULT_TILE_PROVIDER)
+
+    # Added by Jean 2020/06/16
+    palette_key = Setting(next(iter(ContinuousPalettes)))
+
 
     def __init__(self, widget, parent):
         OWChoroplethPlotGraph.__init__(self, widget, parent)
@@ -138,6 +147,19 @@ class OWChoropleth(OWWidget):
         a_slider = gui.hSlider(agg_box, self, 'admin_level', minValue=0,
                                maxValue=4, step=1, label='Detail:',
                                createLabel=False, callback=self.setup_plot)
+
+        # Added by Jean 2020/06/16 for support of selecting color palette   
+        av_slider.setFixedWidth(176)
+        gui.comboBox(visualization_box, self, 'palette_key', label='Palette:',
+                     items=list(ContinuousPalettes.keys()),
+                     callback=self.update_palette, **options)
+
+
+    # Added by Jean 2020/06/16 for support of selecting color palette
+    def update_palette(self):
+        self.agg_attr.palette = ContinuousPalettes[self.palette_key]
+        self.graph.update_colors()
+
 
 3.D:\Anaconda3\Lib\site-packages\orangecontrib\geo\mapper.py
 if is_shapely_speedups_available():
