@@ -189,4 +189,5 @@ Modify ./geo/widgets/owchoropleth.py to add support to selecting color palette i
 
 Jun,17th,2020
 
-Modify ./Orange/widgets/utils/colorpalettes.py to add two custom red color palettes for China.
+Modify ./Orange/widgets/utils/colorpalettes.py to add two custom red color palettes for China. 
+Add ./geo/example/palette.py to create the palettes.
