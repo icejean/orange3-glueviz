@@ -186,3 +186,7 @@ Modify ./geo/mapper.py to force loading map shapes every time init() runs, to av
 Jun, 16th, 2020
 
 Modify ./geo/widgets/owchoropleth.py to add support to selecting color palette in the widget.
+
+Jun,17th,2020
+
+Modify ./Orange/widgets/utils/colorpalettes.py to add two custom red color palettes for China.
