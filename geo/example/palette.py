@@ -267,6 +267,22 @@ clist = gradient("#0000FF")
 print(clist)
 cdict = color_dict(clist)
 plot_gradient_series(cdict)
+# Red
+clist = linear_gradient("#FFFFFF","#800000",256)
+print(clist)
+cdict = color_dict(clist)
+plot_gradient_series(cdict)
+# Green
+clist = linear_gradient("#FFFFFF","#008000",256)
+print(clist)
+cdict = color_dict(clist)
+plot_gradient_series(cdict)
+# Blue
+clist = linear_gradient("#FFFFFF","#000080",256)
+print(clist)
+cdict = color_dict(clist)
+plot_gradient_series(cdict)
+
 
 # Random colors for test
 colors =  rand_hex_color(5) 
