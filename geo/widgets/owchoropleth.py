@@ -580,6 +580,8 @@ class OWChoropleth(OWWidget):
     class Outputs:
         selected_data = Output("Selected Data", Table, default=True)
         annotated_data = Output(ANNOTATED_DATA_SIGNAL_NAME, Table)
+        # Added by Jean 2020/06/20, output agg data for future useage
+        agg_data = Output("Aggregated data", Table)
 
     settings_version = 2
     settingsHandler = DomainContextHandler()
@@ -700,6 +702,7 @@ class OWChoropleth(OWWidget):
         av_slider.setFixedWidth(176)
         gui.comboBox(visualization_box, self, 'palette_key', label='Palette:',
                      items=list(ContinuousPalettes.keys()),
+                     # items = [palette.friendly_name for palette in ContinuousPalettes.values()],
                      callback=self.update_palette, **options)
         
 
@@ -852,6 +855,14 @@ class OWChoropleth(OWWidget):
         self.output_changed.emit(selected_data)
         self.Outputs.selected_data.send(selected_data)
         self.Outputs.annotated_data.send(ann_data)
+        # Added by Jean 2020/06/20, output aggdata for future usage
+        agg_data = self.agg_data   # type: Optional[np.ndarray]
+        region_ids = self.region_ids   # type: Optional[np.ndarray]
+        if agg_data is not None:
+            agg_data = agg_data.reshape(agg_data.shape[0], 1)
+            region_ids = region_ids.reshape(region_ids.shape[0], 1)
+            agg_data = Table.from_numpy(None,agg_data,None,region_ids)
+        self.Outputs.agg_data.send(agg_data)
 
     def recompute_binnings(self):
         if self.is_mode():
@@ -982,6 +993,9 @@ class OWChoropleth(OWWidget):
         self.agg_data = self.agg_data[arg_region_sort]
 
         self.recompute_binnings()
+        
+        # Added by Jean 2020/06/20, output aggregated data
+        self.send_data()
 
         return self.agg_data
 
