@@ -18,7 +18,10 @@ def TDGeoCode(address, key):
      try:
          # 模拟浏览器，否则会被禁止访问
          headers={
-             'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:76.0) Gecko/20100101 Firefox/76.0'
+             'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.77 Safari/537.36',
+             'Accept': 'image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8',
+             'Accept-Encoding': 'gzip, deflate, br',
+             'Accept-Language': 'zh-CN,zh;q=0.9'
              }
          response = requests.get(url,headers=headers)
          response.encoding = 'utf-8'
