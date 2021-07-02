@@ -358,8 +358,11 @@ class ImageLoader(QObject):
         request = QNetworkRequest(url)
         # Modified by Jean 2020/05/21 to support tianditu.gov.cn
         # request.setRawHeader(b"User-Agent", b"OWMap/1.0")
-        request.setRawHeader(b"User-Agent", b"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:76.0) Gecko/20100101 Firefox/76.0")
-        
+        # request.setRawHeader(b"User-Agent", b"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:76.0) Gecko/20100101 Firefox/76.0")
+        request.setRawHeader(b'User-Agent',b'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.77 Safari/537.36')
+        request.setRawHeader(b'Accept',b'image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8')
+        request.setRawHeader(b'Accept-Encoding',b'gzip, deflate, br')
+        request.setRawHeader(b'Accept-Language',b'zh-CN,zh;q=0.9')        
         request.setAttribute(
             QNetworkRequest.CacheLoadControlAttribute,
             QNetworkRequest.PreferCache
