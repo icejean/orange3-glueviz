@@ -443,8 +443,16 @@ def _retryer(tile_url, wait, max_retries):
     -------
     request object containing the web response.
     """
+    headers={
+        'User-Agent':USER_AGENT,
+        'Accept': 'image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8',
+        'Accept-Encoding': 'gzip, deflate, br',
+        'Accept-Language': 'zh-CN,zh;q=0.9'
+        }    
     try:
-        request = requests.get(tile_url, headers={"user-agent": USER_AGENT})
+        # Modified by Jean at 2021/06/25 for TianDiTu
+        #request = requests.get(tile_url, headers={"user-agent": USER_AGENT})
+        request = requests.get(tile_url, headers=headers)        
         request.raise_for_status()
     except requests.HTTPError:
         if request.status_code == 404:
