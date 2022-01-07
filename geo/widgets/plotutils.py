@@ -27,7 +27,8 @@ from Orange.widgets.visualize.utils.plotutils import InteractiveViewBox
 #Added by Jean 2020/05/30
 from contextily.tile import _fetch_tile
 # key of www.tianditu.gov.cn
-TDKEY = "your key of tianditu.gov.cn"
+TDKEY = "7d5cb12a05d8a8f5803ade71a590c91f"
+
 
 MAX_LATITUDE = 85.0511287798
 MAX_LONGITUDE = 180
@@ -75,6 +76,20 @@ _TileProvider = NamedTuple(
 
 
 TILE_PROVIDERS = {
+    # Added by Jean 2020/04/25
+    "Gaode StreetMap": _TileProvider(
+        url="http://wprd01.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=7&x={x}&y={y}&z={z}",        
+        attribution='&copy; <a href="http://map.amap.com/doc/serviceitem.html">高德地图</a>',
+        size=256,
+        max_zoom=18
+    ), 
+    "Gaode Satellite": _TileProvider(
+        #url="http://wprd01.is.autonavi.com/appmaptile?style=8&x={x}&y={y}&z={z}",     
+        url="https://webst01.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}",                
+        attribution='&copy; <a href="http://map.amap.com/doc/serviceitem.html">高德地图</a>',
+        size=256,
+        max_zoom=19
+    ),      
     # Added by Jean 2020/05/21
     "tianditu vector": _TileProvider(
         url="https://t6.tianditu.gov.cn/DataServer?T=vec_w&x={x}&y={y}&l={z}&tk=" + TDKEY,
@@ -93,20 +108,7 @@ TILE_PROVIDERS = {
         attribution='&copy; <a href="https://www.tianditu.gov.cn/">tianditu.gov.cn</a>',
         size=256,
         max_zoom=18
-    ),       
-    # Added by Jean 2020/04/25
-    "Gaode StreetMap": _TileProvider(
-        url="http://wprd01.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=7&x={x}&y={y}&z={z}",        
-        attribution='&copy; <a href="http://map.amap.com/doc/serviceitem.html">高德地图</a>',
-        size=256,
-        max_zoom=18
-    ), 
-    "Gaode Satellite": _TileProvider(
-        url="http://wprd01.is.autonavi.com/appmaptile?style=8&x={x}&y={y}&z={z}",        
-        attribution='&copy; <a href="http://map.amap.com/doc/serviceitem.html">高德地图</a>',
-        size=256,
-        max_zoom=19
-    ),    
+    ),         
     # Added by Jean 2020/05/08
     "ArcGIS": _TileProvider(
         url="https://map.geoq.cn/arcgis/rest/services/ChinaOnlineCommunityENG/MapServer/tile/{z}/{y}/{x}",        
@@ -360,9 +362,14 @@ class ImageLoader(QObject):
         # request.setRawHeader(b"User-Agent", b"OWMap/1.0")
         # request.setRawHeader(b"User-Agent", b"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:76.0) Gecko/20100101 Firefox/76.0")
         request.setRawHeader(b'User-Agent',b'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.77 Safari/537.36')
+        # Updated by Jean @ 2022/1/6
         request.setRawHeader(b'Accept',b'image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8')
         request.setRawHeader(b'Accept-Encoding',b'gzip, deflate, br')
-        request.setRawHeader(b'Accept-Language',b'zh-CN,zh;q=0.9')        
+        request.setRawHeader(b'Accept-Language',b'zh-CN,zh;q=0.9')
+        request.setRawHeader(b'sec-ch-ua',b'" Not;A Brand";v="99", "Google Chrome";v="91", "Chromium";v="91"')
+        request.setRawHeader(b'sec-ch-ua-mobile',b'?0')
+        request.setRawHeader(b'Upgrade-Insecure-Requests',b'1')
+
         request.setAttribute(
             QNetworkRequest.CacheLoadControlAttribute,
             QNetworkRequest.PreferCache
@@ -600,6 +607,8 @@ class MapMixin:
             assert _future.done()
 
             _tile = _future._tile
+            print(_tile.url)
+
             if _future.exception():
                 _tile.n_loadings += 1
                 # retry to download image
@@ -632,7 +641,6 @@ class MapMixin:
                         r, g, b, alpha = image.split()
                         img = img.convert("RGBA")
                         img = Image.composite(image, img, alpha)
-                        print(url)
                                         
                 if not _tile.disc_cache:
                     self.show_internet_error.emit(False)
@@ -642,6 +650,7 @@ class MapMixin:
                 self.futures.remove(_future)
 
         self.futures.append(future)
+
 
     def _cancel_futures(self):
         for future in self.futures:

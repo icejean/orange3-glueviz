@@ -19,9 +19,13 @@ def TDGeoCode(address, key):
          # 模拟浏览器，否则会被禁止访问
          headers={
              'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.77 Safari/537.36',
+             # Modified by Jean @ 2022/01/06
              'Accept': 'image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8',
              'Accept-Encoding': 'gzip, deflate, br',
-             'Accept-Language': 'zh-CN,zh;q=0.9'
+             'Accept-Language': 'zh-CN,zh;q=0.9',
+             'sec-ch-ua': '" Not;A Brand";v="99", "Google Chrome";v="91", "Chromium";v="91"',
+             'sec-ch-ua-mobile': '?0',
+             'Upgrade-Insecure-Requests': '1'
              }
          response = requests.get(url,headers=headers)
          response.encoding = 'utf-8'

@@ -33,9 +33,9 @@ __all__ = [
     "set_cache_dir",
 ]
 
-# Modified by Jean 2020/05/26
+
 #USER_AGENT = "contextily-" + uuid.uuid4().hex
-USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:76.0) Gecko/20100101 Firefox/76.0"
+USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.77 Safari/537.36'
 
 
 tmpdir = tempfile.mkdtemp()
@@ -301,16 +301,28 @@ def _construct_tile_url(provider, x, y, z):
 
 
 @memory.cache
-def _fetch_tile(tile_url, wait, max_retries):
+# def _fetch_tile(tile_url, wait, max_retries):
+#     request = _retryer(tile_url, wait, max_retries)
+#     with io.BytesIO(request.content) as image_stream:
+#         image = Image.open(image_stream).convert("RGBA")
+#         array = np.asarray(image)
+#         image.close()
+#     return array
+
+def _fetch_tile(tile_url, wait, max_retries):  
     request = _retryer(tile_url, wait, max_retries)
     with io.BytesIO(request.content) as image_stream:
         # Modified by Jean 2020/05/29, convert to PNG with alpha channel for tianditu.gov.cn
-        # image = Image.open(image_stream).convert("RGB")        
-        image = Image.open(image_stream).convert("RGBA")
-        array = np.asarray(image)
-        image.close()
-    return array
-
+        #image = Image.open(image_stream).convert("RGB")
+        try:
+            image = Image.open(image_stream).convert("RGBA")
+            array = np.asarray(image)
+            image.close()
+            return array
+        except Exception as ex:
+            print(tile_url) 
+            print(ex)
+            return None
 
 def warp_tiles(img, extent, t_crs="EPSG:4326", resampling=Resampling.bilinear):
     """
@@ -353,11 +365,11 @@ def warp_tiles(img, extent, t_crs="EPSG:4326", resampling=Resampling.bilinear):
     resY = (y[-1] - y[0]) / h
     transform = from_origin(x[0] - resX / 2, y[-1] + resY / 2, resX, resY)
     # ---
-    w_img, vrt = _warper(
+    w_img, bounds, _ = _warper(
         img.transpose(2, 0, 1), transform, "EPSG:3857", t_crs, resampling
     )
     # ---
-    extent = vrt.bounds.left, vrt.bounds.right, vrt.bounds.bottom, vrt.bounds.top
+    extent = bounds.left, bounds.right, bounds.bottom, bounds.top
     return w_img.transpose(1, 2, 0), extent
 
 
@@ -396,13 +408,13 @@ def warp_img_transform(img, transform, s_crs, t_crs, resampling=Resampling.bilin
         Transform of the input image as expressed by `rasterio` and
         the `affine` package
     """
-    w_img, vrt = _warper(img, transform, s_crs, t_crs, resampling)
-    return w_img, vrt.transform
+    w_img, _, w_transform = _warper(img, transform, s_crs, t_crs, resampling)
+    return w_img, w_transform
 
 
 def _warper(img, transform, s_crs, t_crs, resampling):
     """
-    Warp an image returning it as a virtual file
+    Warp an image. Returns the warped image and updated bounds and transform.
     """
     b, h, w = img.shape
     with MemoryFile() as memfile:
@@ -415,12 +427,15 @@ def _warper(img, transform, s_crs, t_crs, resampling):
             crs=s_crs,
             transform=transform,
         ) as mraster:
-            for band in range(b):
-                mraster.write(img[band, :, :], band + 1)
-            # --- Virtual Warp
-            vrt = WarpedVRT(mraster, crs=t_crs, resampling=resampling)
-            img = vrt.read()
-    return img, vrt
+            mraster.write(img)
+    
+        with memfile.open() as mraster:
+            with WarpedVRT(mraster, crs=t_crs, resampling=resampling) as vrt:
+                img = vrt.read()
+                bounds = vrt.bounds
+                transform = vrt.transform
+    
+    return img, bounds, transform
 
 
 def _retryer(tile_url, wait, max_retries):
@@ -445,9 +460,13 @@ def _retryer(tile_url, wait, max_retries):
     """
     headers={
         'User-Agent':USER_AGENT,
+        # Modified by Jean @ 2022/01/06
         'Accept': 'image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8',
         'Accept-Encoding': 'gzip, deflate, br',
-        'Accept-Language': 'zh-CN,zh;q=0.9'
+        'Accept-Language': 'zh-CN,zh;q=0.9',
+        'sec-ch-ua': '" Not;A Brand";v="99", "Google Chrome";v="91", "Chromium";v="91"',
+        'sec-ch-ua-mobile': '?0',
+        'Upgrade-Insecure-Requests': '1'
         }    
     try:
         # Modified by Jean at 2021/06/25 for TianDiTu

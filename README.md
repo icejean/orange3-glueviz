@@ -199,3 +199,7 @@ Modify ./geo/widgets/owchoropleth.py to add aggregated data to output for future
 July, 2nd, 2021
 
 Modify ./geo/contextily/tile.py, ./geo/TianDiTu.py, ./geo/widgets/plotutils.py to update http request headers for TianDiTu online map.
+
+Jan, 7th, 2022
+
+Modify ./geo/contextily/tile.py, ./geo/TianDiTu.py, ./geo/widgets/plotutils.py to update http request headers for TianDiTu online map.
